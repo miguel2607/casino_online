@@ -25,8 +25,11 @@ export function publicUser(u) {
   };
 }
 
+/** Cambia cada vez que cambia la contraseña; va dentro del token de sesión. */
+const passwordVersion = (user) => (user.password_changed_at ? new Date(user.password_changed_at).getTime() : 0);
+
 export function issueToken(res, user) {
-  const token = jwt.sign({ uid: user.id }, config.jwtSecret, { expiresIn: '30d' });
+  const token = jwt.sign({ uid: user.id, pv: passwordVersion(user) }, config.jwtSecret, { expiresIn: '30d' });
   res.cookie(COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',
@@ -50,6 +53,8 @@ export async function requireAuth(req, res, next) {
   }
   const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [payload.uid]);
   if (!rows[0]) throw new HttpError(401, 'Tu sesión expiró, vuelve a entrar');
+  // Las sesiones abiertas antes de un cambio de contraseña dejan de valer
+  if ((payload.pv ?? 0) !== passwordVersion(rows[0])) throw new HttpError(401, 'Tu contraseña cambió, vuelve a entrar');
   req.user = rows[0];
   next();
 }

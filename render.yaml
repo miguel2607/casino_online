@@ -38,3 +38,12 @@ services:
         value: "true"
       - key: TRUST_PROXY
         value: "true"
+      - key: ADMIN_RESET_PASSWORD
+        value: "false"
+      - key: RECOVERY_QUESTION
+        value: ¿Cómo se llama mi jugador de fútbol favorito?
+      - key: RECOVERY_OPTIONS
+        value: Cristiano,Messi,Mbappé,Yamal
+      # La respuesta no va en el repositorio público: se escribe en el panel de Render
+      - key: RECOVERY_ANSWER
+        sync: false

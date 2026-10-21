@@ -47,5 +47,14 @@ export async function migrate() {
     } else if (rows[0].role !== 'admin') {
       await pool.query(`UPDATE users SET role = 'admin' WHERE id = $1`, [rows[0].id]);
     }
+    if (rows[0] && config.adminResetPassword) {
+      const hash = await bcrypt.hash(config.adminPassword, 10);
+      await pool.query(
+        `UPDATE users SET password_hash = $2, password_changed_at = now(), recovery_failed = 0, recovery_locked_until = NULL
+         WHERE id = $1`,
+        [rows[0].id, hash],
+      );
+      console.log(`🔑 Contraseña de "${config.adminUsername}" restablecida desde ADMIN_PASSWORD. Quita ADMIN_RESET_PASSWORD.`);
+    }
   }
 }

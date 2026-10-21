@@ -36,6 +36,12 @@ export function AuthProvider({ children }) {
     return user;
   }, []);
 
+  const recover = useCallback(async (payload) => {
+    const { user } = await post('/auth/recover', payload);
+    setUser(user);
+    return user;
+  }, []);
+
   const logout = useCallback(async () => {
     await post('/auth/logout').catch(() => {});
     setUser(null);
@@ -48,8 +54,8 @@ export function AuthProvider({ children }) {
   const patchUser = useCallback((patch) => setUser((u) => (u ? { ...u, ...patch } : u)), []);
 
   const value = useMemo(
-    () => ({ user, loading, login, register, logout, refresh, setStars, patchUser, reserved, setReserved }),
-    [user, loading, login, register, logout, refresh, setStars, patchUser, reserved],
+    () => ({ user, loading, login, register, recover, logout, refresh, setStars, patchUser, reserved, setReserved }),
+    [user, loading, login, register, recover, logout, refresh, setStars, patchUser, reserved],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

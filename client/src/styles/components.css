@@ -1439,3 +1439,34 @@ a,
     display: none;
   }
 }
+
+/* ---------- Recuperación de contraseña ---------- */
+.forgot-link {
+  align-self: flex-end;
+  margin-top: -6px;
+  font-size: 0.85rem;
+}
+.recovery-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.recovery-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 46px;
+  border-radius: 12px;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.22);
+  border: 2px solid var(--line-strong);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.recovery-option:hover {
+  transform: translateY(-1px);
+}
+.recovery-option.is-active {
+  border-color: var(--pink);
+  background: rgba(255, 111, 174, 0.14);
+}

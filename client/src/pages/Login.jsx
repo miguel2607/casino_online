@@ -6,27 +6,45 @@ import { StarIcon } from '../components/Icons.jsx';
 
 const COLOR_NAMES = { orange: 'Naranja', gray: 'Gris', black: 'Negrito', white: 'Blanco', calico: 'Calicó', cream: 'Crema' };
 
+const SUBTITLE = {
+  login: 'Bienvenida de vuelta, te extrañamos',
+  register: 'Crea tu cuenta y recibe estrellitas de regalo',
+  recover: 'Responde la pregunta secreta y elige una contraseña nueva',
+};
+
 export default function Login() {
-  const { login, register } = useAuth();
-  const [mode, setMode] = useState('login');
+  const { login, register, recover } = useAuth();
+  const [mode, setMode] = useState('login'); // login | register | recover
   const [allowRegistration, setAllowRegistration] = useState(true);
-  const [form, setForm] = useState({ username: '', password: '', displayName: '', avatar: 'calico' });
+  const [recovery, setRecovery] = useState({ enabled: false });
+  const [form, setForm] = useState({ username: '', password: '', confirm: '', displayName: '', avatar: 'calico', answer: '' });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     api('/auth/config').then((c) => setAllowRegistration(c.allowRegistration)).catch(() => {});
+    api('/auth/recovery').then(setRecovery).catch(() => {});
   }, []);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+  const go = (m) => {
+    setMode(m);
+    setError('');
+    setForm((f) => ({ ...f, password: '', confirm: '', answer: '' }));
+  };
 
   const submit = async (e) => {
     e.preventDefault();
     setError('');
+    if (mode === 'recover') {
+      if (!form.answer) return setError('Elige una respuesta');
+      if (form.password !== form.confirm) return setError('Las contraseñas no coinciden');
+    }
     setBusy(true);
     try {
       if (mode === 'login') await login(form.username, form.password);
-      else await register(form);
+      else if (mode === 'register') await register(form);
+      else await recover({ username: form.username, answer: form.answer, newPassword: form.password });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -35,6 +53,7 @@ export default function Login() {
   };
 
   const isRegister = mode === 'register';
+  const isRecover = mode === 'recover';
 
   return (
     <div className="auth-page">
@@ -48,13 +67,18 @@ export default function Login() {
         <div className="auth-hero">
           <div className="auth-cats">
             <Cat color="gray" mood="wink" size={64} />
-            <Cat color={isRegister ? form.avatar : 'orange'} mood="love" size={92} className="auth-cat-main" />
+            <Cat
+              color={isRegister ? form.avatar : 'orange'}
+              mood={isRecover ? 'shocked' : 'love'}
+              size={92}
+              className="auth-cat-main"
+            />
             <Cat color="black" mood="happy" size={64} />
           </div>
           <h1>
             Michi<b>Casino</b>
           </h1>
-          <p>{isRegister ? 'Crea tu cuenta y recibe estrellitas de regalo' : 'Bienvenida de vuelta, te extrañamos'}</p>
+          <p>{SUBTITLE[mode]}</p>
         </div>
 
         <form className="auth-form" onSubmit={submit}>
@@ -69,23 +93,58 @@ export default function Login() {
               required
             />
           </label>
+
           {isRegister && (
             <label className="field">
               <span>¿Cómo te llamamos?</span>
               <input value={form.displayName} onChange={set('displayName')} placeholder="Tu nombre o apodo" />
             </label>
           )}
+
+          {isRecover && (
+            <div className="field">
+              <span>{recovery.question}</span>
+              <div className="recovery-options" role="radiogroup">
+                {recovery.options.map((opt) => (
+                  <button
+                    type="button"
+                    key={opt}
+                    role="radio"
+                    aria-checked={form.answer === opt}
+                    className={`recovery-option ${form.answer === opt ? 'is-active' : ''}`}
+                    onClick={() => setForm((f) => ({ ...f, answer: opt }))}
+                  >
+                    <span aria-hidden="true">⚽</span> {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <label className="field">
-            <span>Contraseña</span>
+            <span>{isRecover ? 'Contraseña nueva' : 'Contraseña'}</span>
             <input
               type="password"
-              autoComplete={isRegister ? 'new-password' : 'current-password'}
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               value={form.password}
               onChange={set('password')}
               placeholder="••••••"
               required
             />
           </label>
+
+          {isRecover && (
+            <label className="field">
+              <span>Repite la contraseña nueva</span>
+              <input type="password" autoComplete="new-password" value={form.confirm} onChange={set('confirm')} placeholder="••••••" required />
+            </label>
+          )}
+
+          {mode === 'login' && recovery.enabled && (
+            <button type="button" className="link-btn forgot-link" onClick={() => go('recover')}>
+              ¿Olvidaste tu contraseña?
+            </button>
+          )}
 
           {isRegister && (
             <div className="field">
@@ -109,24 +168,26 @@ export default function Login() {
           {error && <div className="form-error">{error}</div>}
 
           <button className="btn btn-primary btn-lg btn-block" disabled={busy}>
-            {busy ? 'Un momento…' : isRegister ? 'Crear cuenta' : 'Entrar'}
+            {busy ? 'Un momento…' : isRecover ? 'Cambiar contraseña y entrar' : isRegister ? 'Crear cuenta' : 'Entrar'}
           </button>
         </form>
 
-        {(allowRegistration || isRegister) && (
+        {isRecover ? (
           <p className="auth-switch">
-            {isRegister ? '¿Ya tienes cuenta?' : '¿Primera vez aquí?'}{' '}
-            <button
-              type="button"
-              className="link-btn"
-              onClick={() => {
-                setMode(isRegister ? 'login' : 'register');
-                setError('');
-              }}
-            >
-              {isRegister ? 'Inicia sesión' : 'Crea tu cuenta'}
+            ¿Ya la recordaste?{' '}
+            <button type="button" className="link-btn" onClick={() => go('login')}>
+              Volver a iniciar sesión
             </button>
           </p>
+        ) : (
+          (allowRegistration || isRegister) && (
+            <p className="auth-switch">
+              {isRegister ? '¿Ya tienes cuenta?' : '¿Primera vez aquí?'}{' '}
+              <button type="button" className="link-btn" onClick={() => go(isRegister ? 'login' : 'register')}>
+                {isRegister ? 'Inicia sesión' : 'Crea tu cuenta'}
+              </button>
+            </p>
+          )
         )}
       </div>
     </div>

@@ -12,6 +12,11 @@ CREATE TABLE IF NOT EXISTS users (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS users_username_lower_idx ON users (lower(username));
 
+-- Recuperación de contraseña
+ALTER TABLE users ADD COLUMN IF NOT EXISTS recovery_failed INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS recovery_locked_until TIMESTAMPTZ;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMPTZ;
+
 -- Libro contable: cada movimiento de estrellitas queda registrado
 CREATE TABLE IF NOT EXISTS transactions (
   id            BIGSERIAL PRIMARY KEY,

@@ -27,4 +27,15 @@ export const config = {
   databaseSsl: process.env.DATABASE_SSL === 'true',
   // Render (y cualquier proxy HTTPS) va delante de la app
   trustProxy: process.env.TRUST_PROXY === 'true',
+  // Si es true, al arrancar la contraseña del admin se reemplaza por ADMIN_PASSWORD
+  adminResetPassword: process.env.ADMIN_RESET_PASSWORD === 'true',
+  // Recuperación de contraseña con pregunta secreta (la respuesta nunca va en el código)
+  recovery: {
+    question: process.env.RECOVERY_QUESTION || '¿Cómo se llama mi jugador de fútbol favorito?',
+    options: (process.env.RECOVERY_OPTIONS || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
+    answer: process.env.RECOVERY_ANSWER?.trim() || '',
+  },
 };
