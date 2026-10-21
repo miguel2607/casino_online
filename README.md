@@ -51,7 +51,7 @@ Todo el azar se decide en el servidor y cada movimiento de estrellitas queda en 
 
 ## Jugar en pareja 💞
 
-En **Pareja** cada uno tiene un código de invitación (por ejemplo ). Uno lo comparte y el otro lo escribe para vincularse. Desde ahí:
+En **Pareja** cada uno tiene un código de invitación (por ejemplo `MICHI-4F7KQ`). Uno lo comparte y el otro lo escribe para vincularse. Desde ahí:
 
 - **6 juegos en tiempo real** (Socket.IO): Piedra, papel o tijera · Conecta 4 de Michis · Memoria de Michis · Duelo de Solitario (mismo reparto para los dos) · Blackjack en pareja (los dos contra el crupier) · Carrera en pareja. Cada partida puede ser amistosa o con apuesta: el ganador se lleva el bote.
 - **Stickers de michis** que le aparecen al otro al instante.
