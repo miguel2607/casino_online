@@ -1,20 +1,20 @@
+# Toda la configuración sale del archivo .env (copia .env.example)
 services:
   db:
     image: postgres:17-alpine
     container_name: michi-casino-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: michi
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-michi_casino_2026}
-      POSTGRES_DB: michi_casino
-      TZ: America/Bogota
+      POSTGRES_USER: ${DB_USER:?Define DB_USER en .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+      POSTGRES_DB: ${DB_NAME:?Define DB_NAME en .env}
+      TZ: ${TIMEZONE}
     ports:
-      # Expuesto en 5440 (para desarrollo local y para ver los datos con pgAdmin/DBeaver)
-      - "5440:5432"
+      - "${DB_PORT:?Define DB_PORT en .env}:5432"
     volumes:
       - michi_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U michi -d michi_casino"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -28,16 +28,19 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://michi:${DB_PASSWORD:-michi_casino_2026}@db:5432/michi_casino
-      PORT: 4000
-      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET en el archivo .env}
-      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Define ADMIN_PASSWORD en el archivo .env}
-      TIMEZONE: America/Bogota
-      TZ: America/Bogota
-      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      DATABASE_SSL: ${DATABASE_SSL}
+      PORT: ${PORT:?Define PORT en .env}
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET en .env}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?Define ADMIN_USERNAME en .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Define ADMIN_PASSWORD en .env}
+      TIMEZONE: ${TIMEZONE}
+      TZ: ${TIMEZONE}
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION}
+      COOKIE_SECURE: ${COOKIE_SECURE}
+      TRUST_PROXY: ${TRUST_PROXY}
     ports:
-      - "8080:4000"
+      - "${APP_PORT:?Define APP_PORT en .env}:${PORT}"
 
 volumes:
   michi_data:

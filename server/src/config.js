@@ -24,4 +24,7 @@ export const config = {
   timezone: process.env.TIMEZONE || 'America/Bogota',
   allowRegistration: process.env.ALLOW_REGISTRATION !== 'false',
   cookieSecure: process.env.COOKIE_SECURE === 'true',
+  databaseSsl: process.env.DATABASE_SSL === 'true',
+  // Render (y cualquier proxy HTTPS) va delante de la app
+  trustProxy: process.env.TRUST_PROXY === 'true',
 };

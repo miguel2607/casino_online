@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { ensureDatabase } from './db.js';
+import { ensureDatabase, pool } from './db.js';
 import { migrate } from './migrate.js';
 import { requireAdmin, requireAuth } from './auth.js';
 import authRoutes from './routes/auth.js';
@@ -15,10 +15,27 @@ import gameRoutes from './games/index.js';
 
 const app = express();
 app.disable('x-powered-by');
+if (config.trustProxy) app.set('trust proxy', 1);
+
+// Salud: para UptimeRobot / Render. Responde GET y HEAD y comprueba la base de datos.
+const startedAt = Date.now();
+async function health(req, res) {
+  res.set('Cache-Control', 'no-store');
+  try {
+    await Promise.race([
+      pool.query('SELECT 1'),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
+    ]);
+    res.json({ status: 'ok', db: 'ok', uptime: Math.round((Date.now() - startedAt) / 1000), time: new Date().toISOString() });
+  } catch {
+    res.status(503).json({ status: 'error', db: 'down', time: new Date().toISOString() });
+  }
+}
+app.get('/health', health);
+app.get('/api/health', health);
+
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
-
-app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/me', requireAuth, meRoutes);
 app.use('/api/rewards', requireAuth, rewardRoutes);
@@ -53,6 +70,6 @@ try {
   process.exit(1);
 }
 
-app.listen(config.port, () => {
+app.listen(config.port, '0.0.0.0', () => {
   console.log(`🐱 Michi Casino API escuchando en http://localhost:${config.port}`);
 });

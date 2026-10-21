@@ -57,3 +57,11 @@ Todo el azar se decide en el servidor y cada movimiento de estrellitas queda en 
 - **Ajustes**: estrellitas de bienvenida y monto del bono diario.
 
 Cuando ella ya tenga cuenta, pon `ALLOW_REGISTRATION=false` en `.env` y ejecuta `docker compose up -d` para cerrar el registro.
+
+## Despliegue en Render
+
+1. Render → **New → Blueprint** → conecta este repositorio. Render lee `render.yaml` y crea la base de datos `michi-casino-db` y el web service `michi-casino` (Docker).
+2. Cuando lo pida, escribe el valor de `ADMIN_PASSWORD`.
+3. Al terminar, la app queda en `https://michi-casino.onrender.com` (o el nombre que Render asigne).
+
+Salud: `GET /health` (o `/api/health`) devuelve `200` si la app y la base están bien y `503` si la base no responde. Úsalo en UptimeRobot cada 5 minutos para que el plan gratuito no se duerma.
