@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: michi-casino-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: michi
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-michi_casino_2026}
+      POSTGRES_DB: michi_casino
+      TZ: America/Bogota
+    ports:
+      # Expuesto en 5440 (para desarrollo local y para ver los datos con pgAdmin/DBeaver)
+      - "5440:5432"
+    volumes:
+      - michi_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U michi -d michi_casino"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    image: michi-casino:latest
+    container_name: michi-casino-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://michi:${DB_PASSWORD:-michi_casino_2026}@db:5432/michi_casino
+      PORT: 4000
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET en el archivo .env}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Define ADMIN_PASSWORD en el archivo .env}
+      TIMEZONE: America/Bogota
+      TZ: America/Bogota
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+    ports:
+      - "8080:4000"
+
+volumes:
+  michi_data:
