@@ -4,16 +4,20 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
+import { SocketProvider } from './context/SocketContext.jsx';
 import './styles/base.css';
 import './styles/components.css';
 import './styles/games.css';
+import './styles/couple.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <ToastProvider>
         <AuthProvider>
-          <App />
+          <SocketProvider>
+            <App />
+          </SocketProvider>
         </AuthProvider>
       </ToastProvider>
     </BrowserRouter>

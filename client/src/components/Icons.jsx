@@ -35,6 +35,7 @@ export function PawIcon({ size = 18, color = 'currentColor', className = '' }) {
 
 const paths = {
   home: 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',
+  heart: 'M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3.2A4.8 4.8 0 0 1 21 11c-2 4.6-9 9-9 9z',
   history: 'M12 7v5l3 2M3.5 12a8.5 8.5 0 1 0 2.5-6M3 4v4h4',
   gift: 'M4 11h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM3 7h18v4H3zM12 7v14M12 7S10.5 3 8 3a2 2 0 0 0 0 4M12 7s1.5-4 4-4a2 2 0 0 1 0 4',
   crown: 'M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z',

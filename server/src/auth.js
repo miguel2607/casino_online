@@ -20,6 +20,7 @@ export function publicUser(u) {
     role: u.role,
     stars: u.stars,
     avatar: u.avatar,
+    partnerId: u.partner_id ?? null,
     canClaimBonus: !u.last_daily_bonus || u.last_daily_bonus < todayStr(),
     createdAt: u.created_at,
   };
@@ -42,8 +43,8 @@ export function clearToken(res) {
   res.clearCookie(COOKIE, { httpOnly: true, sameSite: 'lax', secure: config.cookieSecure });
 }
 
-export async function requireAuth(req, res, next) {
-  const token = req.cookies?.[COOKIE];
+/** Valida el token de sesión y devuelve el usuario (lo usan HTTP y los sockets). */
+export async function userFromToken(token) {
   if (!token) throw new HttpError(401, 'Inicia sesión para continuar');
   let payload;
   try {
@@ -55,7 +56,20 @@ export async function requireAuth(req, res, next) {
   if (!rows[0]) throw new HttpError(401, 'Tu sesión expiró, vuelve a entrar');
   // Las sesiones abiertas antes de un cambio de contraseña dejan de valer
   if ((payload.pv ?? 0) !== passwordVersion(rows[0])) throw new HttpError(401, 'Tu contraseña cambió, vuelve a entrar');
-  req.user = rows[0];
+  return rows[0];
+}
+
+/** Lee la cookie de sesión de una cabecera Cookie cruda (handshake del socket). */
+export function tokenFromCookieHeader(header = '') {
+  for (const part of header.split(';')) {
+    const [k, ...v] = part.trim().split('=');
+    if (k === COOKIE) return decodeURIComponent(v.join('='));
+  }
+  return null;
+}
+
+export async function requireAuth(req, res, next) {
+  req.user = await userFromToken(req.cookies?.[COOKIE]);
   next();
 }
 

@@ -7,6 +7,8 @@ import Lobby from './pages/Lobby.jsx';
 import History from './pages/History.jsx';
 import Rewards from './pages/Rewards.jsx';
 import Admin from './pages/Admin.jsx';
+import Couple from './pages/Couple.jsx';
+import Match from './pages/Match.jsx';
 import Blackjack from './games/Blackjack.jsx';
 import Roulette from './games/Roulette.jsx';
 import Solitaire from './games/Solitaire.jsx';
@@ -46,6 +48,8 @@ export default function App() {
         }
       >
         <Route index element={<Lobby />} />
+        <Route path="pareja" element={<Couple />} />
+        <Route path="pareja/partida/:id" element={<Match />} />
         <Route path="historial" element={<History />} />
         <Route path="recompensas" element={<Rewards />} />
         <Route

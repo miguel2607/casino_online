@@ -6,29 +6,7 @@ import GameHeader from '../components/GameHeader.jsx';
 import BetSelector from '../components/BetSelector.jsx';
 import ResultBanner from '../components/ResultBanner.jsx';
 import Cat from '../components/Cat.jsx';
-
-const BASE_MS = 6000;
-const SEGMENTS = 10;
-
-/** Genera la trayectoria de cada michi: llega a la meta en su tiempo según el orden real. */
-function buildPlan(order) {
-  const plan = {};
-  order.forEach((id, rank) => {
-    const finish = BASE_MS + rank * (220 + Math.random() * 260);
-    const w = Array.from({ length: SEGMENTS }, () => 0.55 + Math.random() * 0.9);
-    const sum = w.reduce((a, b) => a + b, 0);
-    let acc = 0;
-    plan[id] = { finish, points: [0, ...w.map((x) => (acc += x / sum))] };
-  });
-  return plan;
-}
-
-function positionAt(p, t) {
-  if (t >= p.finish) return 1;
-  const f = (t / p.finish) * SEGMENTS;
-  const i = Math.floor(f);
-  return p.points[i] + (p.points[i + 1] - p.points[i]) * (f - i);
-}
+import { buildPlan, positionAt } from '../raceAnim.js';
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 

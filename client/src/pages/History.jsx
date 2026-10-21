@@ -6,7 +6,7 @@ import Cat from '../components/Cat.jsx';
 import { fmt, fmtDate } from '../format.js';
 
 const OUTCOME = { win: 'Ganada', lose: 'Perdida', push: 'Empate' };
-const KIND = { bet: 'Apuesta', win: 'Premio', refund: 'Devolución', bonus: 'Bono', redeem: 'Canje', admin: 'Regalo' };
+const KIND = { bet: 'Apuesta', win: 'Premio', refund: 'Devolución', bonus: 'Bono', redeem: 'Canje', admin: 'Regalo', gift: 'Regalo' };
 
 export default function History() {
   const [tab, setTab] = useState('games');

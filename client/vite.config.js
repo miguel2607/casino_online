@@ -10,6 +10,9 @@ export default defineConfig({
   server: {
     port: 5173,
     fs: { allow: ['..'] },
-    proxy: { '/api': 'http://localhost:4000' },
+    proxy: {
+      '/api': 'http://localhost:4000',
+      '/socket.io': { target: 'http://localhost:4000', ws: true },
+    },
   },
 });

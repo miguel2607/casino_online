@@ -89,3 +89,28 @@ CREATE TABLE IF NOT EXISTS settings (
   key   TEXT PRIMARY KEY,
   value JSONB NOT NULL
 );
+
+-- ---------- Pareja ----------
+ALTER TABLE users ADD COLUMN IF NOT EXISTS partner_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS invite_code TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS users_invite_code_idx ON users (invite_code);
+
+-- Recompensas creadas por un jugador para su pareja (NULL = creada por el admin para todos)
+ALTER TABLE rewards ADD COLUMN IF NOT EXISTS creator_id INTEGER REFERENCES users(id) ON DELETE CASCADE;
+-- Quién debe cumplir el canje (NULL = el admin)
+ALTER TABLE redemptions ADD COLUMN IF NOT EXISTS fulfiller_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
+
+-- Partidas en tiempo real entre la pareja
+CREATE TABLE IF NOT EXISTS matches (
+  id         BIGSERIAL PRIMARY KEY,
+  game       TEXT NOT NULL,
+  player_a   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  player_b   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  stake      INTEGER NOT NULL DEFAULT 0,
+  status     TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'finished')),
+  state      JSONB NOT NULL,
+  result     JSONB,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS matches_active_idx ON matches (status, player_a, player_b);

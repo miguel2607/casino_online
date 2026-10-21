@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import { useSocket } from '../context/SocketContext.jsx';
 import { api, post } from '../api.js';
 import { GAMES, GAME_BY_ID } from '../gameList.js';
 import Cat from '../components/Cat.jsx';
@@ -19,6 +20,7 @@ function greeting() {
 
 export default function Lobby() {
   const { user, setStars, patchUser } = useAuth();
+  const { partnerOnline } = useSocket();
   const toast = useToast();
   const [recent, setRecent] = useState([]);
   const [claiming, setClaiming] = useState(false);
@@ -82,6 +84,19 @@ export default function Lobby() {
           <Cat color={user.avatar} mood="love" size={170} className="hero-cat" />
         </div>
       </section>
+
+      <Link to="/pareja" className="active-match couple-promo">
+        <span>💞</span>
+        <div>
+          <strong>{user.partnerId ? 'Jugar en pareja' : 'Vincúlate con tu pareja'}</strong>
+          <small>
+            {user.partnerId
+              ? `${partnerOnline ? 'Tu pareja está en línea · ' : ''}6 juegos en tiempo real, stickers y cupones`
+              : 'Jueguen juntos en tiempo real y créense cupones'}
+          </small>
+        </div>
+        <span className="btn btn-primary btn-sm">{user.partnerId ? 'Jugar' : 'Vincular'}</span>
+      </Link>
 
       <section>
         <div className="section-head">

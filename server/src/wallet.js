@@ -9,6 +9,13 @@ export const GAME_LABELS = {
   hilo: 'Mayor o Menor',
   shell: 'Encuentra al Michi',
   scratch: 'Rasca y Gana',
+  // En pareja (tiempo real)
+  mp_rps: 'Piedra, papel o tijera',
+  mp_connect4: 'Conecta 4 de Michis',
+  mp_memory: 'Memoria de Michis',
+  mp_solitaire: 'Duelo de Solitario',
+  mp_blackjack: 'Blackjack en pareja',
+  mp_race: 'Carrera en pareja',
 };
 
 export const MAX_BET = 1_000_000;
@@ -44,7 +51,7 @@ export function placeBet(client, userId, game, bet) {
 }
 
 /** Paga el premio (si hay) y guarda el resultado de la partida. */
-export async function settle(client, { userId, game, bet, payout, summary, details = {} }) {
+export async function settle(client, { userId, game, bet, payout, summary, details = {}, outcome: forcedOutcome }) {
   let stars;
   if (payout > 0) {
     const isRefund = payout === bet;
@@ -59,7 +66,8 @@ export async function settle(client, { userId, game, bet, payout, summary, detai
   } else {
     stars = (await client.query('SELECT stars FROM users WHERE id = $1', [userId])).rows[0].stars;
   }
-  const outcome = payout > bet ? 'win' : payout === bet ? 'push' : 'lose';
+  // En partidas amistosas (sin apuesta) el resultado no se puede deducir del pago
+  const outcome = forcedOutcome ?? (payout > bet ? 'win' : payout === bet ? 'push' : 'lose');
   await client.query(
     `INSERT INTO game_results (user_id, game, bet, payout, outcome, summary, details)
      VALUES ($1, $2, $3, $4, $5, $6, $7)`,

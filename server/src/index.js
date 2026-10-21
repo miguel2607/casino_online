@@ -1,5 +1,6 @@
 import { config } from './config.js';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
@@ -11,6 +12,8 @@ import authRoutes from './routes/auth.js';
 import meRoutes from './routes/me.js';
 import rewardRoutes from './routes/rewards.js';
 import adminRoutes from './routes/admin.js';
+import coupleRoutes from './routes/couple.js';
+import { attachRealtime } from './realtime.js';
 import gameRoutes from './games/index.js';
 
 const app = express();
@@ -40,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/me', requireAuth, meRoutes);
 app.use('/api/rewards', requireAuth, rewardRoutes);
 app.use('/api/games', requireAuth, gameRoutes);
+app.use('/api/couple', requireAuth, coupleRoutes);
 app.use('/api/admin', requireAuth, requireAdmin, adminRoutes);
 app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
 
@@ -70,6 +74,8 @@ try {
   process.exit(1);
 }
 
-app.listen(config.port, '0.0.0.0', () => {
+const server = http.createServer(app);
+attachRealtime(server);
+server.listen(config.port, '0.0.0.0', () => {
   console.log(`🐱 Michi Casino API escuchando en http://localhost:${config.port}`);
 });

@@ -49,6 +49,17 @@ La configuración de desarrollo está en `server/.env` (copia de `server/.env.ex
 
 Todo el azar se decide en el servidor y cada movimiento de estrellitas queda en un libro contable (`transactions`). Cada partida queda en `game_results`.
 
+## Jugar en pareja 💞
+
+En **Pareja** cada uno tiene un código de invitación (por ejemplo ). Uno lo comparte y el otro lo escribe para vincularse. Desde ahí:
+
+- **6 juegos en tiempo real** (Socket.IO): Piedra, papel o tijera · Conecta 4 de Michis · Memoria de Michis · Duelo de Solitario (mismo reparto para los dos) · Blackjack en pareja (los dos contra el crupier) · Carrera en pareja. Cada partida puede ser amistosa o con apuesta: el ganador se lleva el bote.
+- **Stickers de michis** que le aparecen al otro al instante.
+- **Regalarse estrellitas** con un mensaje.
+- **Cupones en ambas direcciones**: en Recompensas cada uno crea cupones para el otro; quien los crea es quien los cumple (pestaña *Por cumplir*). Los cupones creados desde el panel de admin siguen siendo "del casino".
+
+Los juegos individuales siguen funcionando igual para cuando cada uno quiera jugar solo.
+
 ## Panel de administración
 
 - **Canjes**: marcar como cumplido (con mensaje para ella) o cancelar y devolver las estrellitas.

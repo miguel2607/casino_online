@@ -81,4 +81,56 @@ export const GAMES = [
   },
 ];
 
-export const GAME_BY_ID = Object.fromEntries(GAMES.map((g) => [g.id, g]));
+// Juegos en tiempo real para jugar en pareja
+export const MULTI_GAMES = [
+  {
+    id: 'rps',
+    name: 'Piedra, papel o tijera',
+    emoji: '✊',
+    tagline: 'Al mejor de 3, eligen en secreto',
+    gradient: 'linear-gradient(135deg, #f472b6, #9d174d)',
+  },
+  {
+    id: 'connect4',
+    name: 'Conecta 4 de Michis',
+    emoji: '🔴',
+    tagline: 'Alinea 4 michis antes que tu pareja',
+    gradient: 'linear-gradient(135deg, #3d6fd8, #23408a)',
+  },
+  {
+    id: 'memory',
+    name: 'Memoria de Michis',
+    emoji: '🧠',
+    tagline: 'Encuentra más parejas de michis',
+    gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)',
+  },
+  {
+    id: 'solitaire',
+    name: 'Duelo de Solitario',
+    emoji: '♠️',
+    tagline: 'El mismo reparto, gana quien termine primero',
+    gradient: 'linear-gradient(135deg, #1f8a6b, #0f5b4a)',
+    options: true,
+  },
+  {
+    id: 'blackjack',
+    name: 'Blackjack en pareja',
+    emoji: '🃏',
+    tagline: 'Los dos contra el crupier, en la misma mesa',
+    gradient: 'linear-gradient(135deg, #c43a5a, #7a1c3b)',
+  },
+  {
+    id: 'race',
+    name: 'Carrera en pareja',
+    emoji: '🏁',
+    tagline: 'Gana aquel cuyo michi llegue antes',
+    gradient: 'linear-gradient(135deg, #f59e42, #c2552a)',
+  },
+];
+
+export const MULTI_BY_ID = Object.fromEntries(MULTI_GAMES.map((g) => [g.id, g]));
+
+export const GAME_BY_ID = Object.fromEntries([
+  ...GAMES.map((g) => [g.id, g]),
+  ...MULTI_GAMES.map((g) => [`mp_${g.id}`, { ...g, name: `${g.name} 💞` }]),
+]);

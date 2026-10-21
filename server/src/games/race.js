@@ -15,7 +15,7 @@ const CATS = [
   { id: 'galleta', name: 'Galleta', color: 'cream' },
 ];
 
-function newCard() {
+export function newCard() {
   const strength = CATS.map(() => 1 + randomFloat() * 3);
   const total = strength.reduce((a, b) => a + b, 0);
   return {
@@ -27,7 +27,7 @@ function newCard() {
 }
 
 /** Orden de llegada: sorteo ponderado sin reemplazo. */
-function raceOrder(runners) {
+export function raceOrder(runners) {
   const left = [...runners];
   const order = [];
   while (left.length) {
