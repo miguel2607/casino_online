@@ -53,7 +53,7 @@ function ScratchLayer({ onDone, revealed }) {
     const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let clear = 0;
     const step = 64;
-    for (let i = 3; i < data.length; i += 4 * step) if (data[i] === 0) clear++;
+    for (let i = 3; i < data.length; i += 4 * step) if (data[i] < 40) clear++;
     return clear / (data.length / (4 * step));
   };
 
@@ -63,6 +63,7 @@ function ScratchLayer({ onDone, revealed }) {
     const rect = canvas.getBoundingClientRect();
     const ctx = canvas.getContext('2d');
     ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = '#000'; // opaco: borra por completo
     ctx.beginPath();
     ctx.arc(e.clientX - rect.left, e.clientY - rect.top, Math.max(18, rect.width / 14), 0, Math.PI * 2);
     ctx.fill();

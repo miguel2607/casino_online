@@ -12,6 +12,8 @@ const RED = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 
 const colorOf = (n) => (n === 0 ? 'green' : RED.has(n) ? 'red' : 'black');
 const SEG = 360 / WHEEL.length;
 const CHIPS = [1, 5, 10, 25, 100];
+// En pantallas táctiles no existe el clic derecho
+const canHover = typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches;
 const SPIN_MS = 5200;
 
 const keyOf = (type, value) => (value == null ? type : `${type}:${value}`);
@@ -79,6 +81,7 @@ export default function Roulette() {
   const [result, setResult] = useState(null);
   const [recent, setRecent] = useState([]);
   const timer = useRef();
+  const wheelRef = useRef(null);
 
   useEffect(() => {
     api('/me/history?game=roulette&limit=12')
@@ -162,6 +165,10 @@ export default function Roulette() {
     const jitter = (Math.random() - 0.5) * SEG * 0.6;
     setRotation(base + 360 * 6 + target + jitter);
     setSpinning(true);
+    // En pantallas angostas la rueda queda arriba de la mesa: la mostramos al girar
+    if (window.matchMedia('(max-width: 920px)').matches) {
+      wheelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     timer.current = setTimeout(() => {
       setSpinning(false);
       setResult(data);
@@ -201,7 +208,7 @@ export default function Roulette() {
       <GameHeader title="Ruleta" emoji="🎡" subtitle="Ruleta europea · Pleno paga 35:1, docenas y columnas 2:1, colores 1:1" />
 
       <div className="roulette-layout">
-        <div className="roulette-left">
+        <div className="roulette-left" ref={wheelRef}>
           <Wheel rotation={rotation} result={result?.number ?? null} spinning={spinning} />
           <div className="recent-numbers">
             <span className="muted small">Últimos números</span>
@@ -222,7 +229,14 @@ export default function Roulette() {
               {Cell({ type: 'number', value: 0, className: 'rt-zero num-green', children: '0' })}
               {columns.map((col, ci) =>
                 col.map((n, ri) =>
-                  Cell({ type: 'number', value: n, className: `num-${colorOf(n)}`, style: { gridColumn: ci + 2, gridRow: ri + 1 }, children: n }),
+                  Cell({
+                    type: 'number',
+                    value: n,
+                    className: `rt-num num-${colorOf(n)}`,
+                    // Posición en la mesa horizontal (--c/--r) y en la vertical del celular (--vc/--vr)
+                    style: { '--c': ci + 2, '--r': ri + 1, '--vc': ((n - 1) % 3) + 3, '--vr': Math.floor((n - 1) / 3) + 2 },
+                    children: n,
+                  }),
                 ),
               )}
               {[3, 2, 1].map((c, i) => Cell({ type: 'column', value: c, className: `rt-col rt-col-${i + 1}`, children: '2:1' }))}
@@ -263,7 +277,7 @@ export default function Roulette() {
             </div>
             <p className="rt-mode-hint muted small">
               {mode === 'add'
-                ? `Toca una casilla para poner ${chip} ⭐. Clic derecho para quitar.`
+                ? `Toca una casilla para poner ${chip} ⭐.${canHover ? ' Clic derecho para quitar.' : ''}`
                 : `Toca una casilla con fichas para quitarle ${chip} ⭐.`}
             </p>
 

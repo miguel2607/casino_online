@@ -140,7 +140,9 @@ export default function CatRace() {
                 <Cat color={r.color} size={46} mood={pick === r.id ? 'happy' : 'normal'} />
                 <div>
                   <strong>{r.name}</strong>
-                  <small>{r.chance}% de ganar</small>
+                  <small>
+                    {r.chance}%<span className="hide-sm"> de ganar</span>
+                  </small>
                 </div>
                 <span className="odds">x{r.odds.toFixed(1)}</span>
               </button>

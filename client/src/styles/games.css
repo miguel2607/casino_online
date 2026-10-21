@@ -443,6 +443,7 @@
 .rt-cell.is-win {
   box-shadow: inset 0 0 0 3px var(--mint);
 }
+.rt-num { grid-column: var(--c); grid-row: var(--r); }
 .rt-zero { grid-column: 1; grid-row: 1 / 4; }
 .rt-col { grid-column: 14; font-size: 0.8rem; }
 .rt-col-1 { grid-row: 1; }
@@ -459,6 +460,78 @@
 .rt-out-4 { grid-column: 8 / 10; font-size: 1.3rem; color: #1e1729; background: rgba(0, 0, 0, 0.12) !important; text-shadow: 0 0 1px #fff; }
 .rt-out-5 { grid-column: 10 / 12; }
 .rt-out-6 { grid-column: 12 / 14; }
+/* Mesa vertical en celulares: 0 arriba, números 1-36 en tres columnas, apuestas exteriores a la izquierda */
+@media (max-width: 640px) {
+  .rt-board-wrap {
+    padding: 10px;
+    overflow: visible;
+  }
+  .rt-board {
+    min-width: 0;
+    grid-template-columns: 0.9fr 0.9fr repeat(3, 1.2fr);
+    grid-template-rows: 40px repeat(12, 36px) 36px;
+    gap: 3px;
+  }
+  .rt-cell {
+    font-size: 0.9rem;
+    border-radius: 6px;
+  }
+  .rt-num { grid-column: var(--vc); grid-row: var(--vr); }
+  .rt-zero { grid-column: 3 / 6; grid-row: 1; }
+  .rt-col { grid-row: 14; }
+  .rt-col-1 { grid-column: 5; }
+  .rt-col-2 { grid-column: 4; }
+  .rt-col-3 { grid-column: 3; }
+  .rt-dozen,
+  .rt-out {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.8rem;
+  }
+  .rt-dozen { grid-column: 2; }
+  .rt-dozen-1 { grid-row: 2 / 6; }
+  .rt-dozen-2 { grid-row: 6 / 10; }
+  .rt-dozen-3 { grid-row: 10 / 14; }
+  .rt-out { grid-column: 1; }
+  .rt-out-1 { grid-row: 2 / 4; }
+  .rt-out-2 { grid-row: 4 / 6; }
+  .rt-out-3 { grid-row: 6 / 8; }
+  .rt-out-4 { grid-row: 8 / 10; }
+  .rt-out-5 { grid-row: 10 / 12; }
+  .rt-out-6 { grid-row: 12 / 14; }
+  .rt-out-3,
+  .rt-out-4 {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+  .rt-chip {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
+  }
+  .rt-dozen .rt-chip,
+  .rt-out .rt-chip {
+    transform: rotate(180deg);
+  }
+  .wheel-wrap {
+    width: min(100%, 270px);
+  }
+  .rt-controls {
+    grid-template-columns: 1fr;
+  }
+  .rt-summary {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+  }
+  .rt-controls .action-row > .btn-lg {
+    flex-basis: 100%;
+    order: -1;
+  }
+}
+
 .rt-chip {
   position: absolute;
   z-index: 3;
@@ -1109,4 +1182,169 @@
   border-radius: var(--radius);
   background: rgba(255, 207, 90, 0.12);
   color: var(--gold);
+}
+
+/* ================= Ajustes para celular ================= */
+.roulette-right {
+  min-width: 0;
+}
+.controls > * + * {
+  margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .game-header {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .game-header p {
+    font-size: 0.8rem;
+  }
+  .felt {
+    border-width: 6px;
+  }
+  .bet-panel {
+    padding: 14px;
+  }
+  .chip {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Blackjack */
+  .bj-table {
+    min-height: 0;
+    gap: 14px;
+    padding: 16px 10px;
+  }
+
+  /* Mayor o menor */
+  .hilo-stats span {
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+  }
+  .hilo-stats strong {
+    font-size: 1.1rem;
+  }
+
+  /* Tragamichis */
+  .slot-machine {
+    padding: 12px;
+    border-radius: 24px;
+  }
+  .slot-top .cat {
+    width: 46px;
+    height: auto;
+  }
+  .slot-window {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  /* Encuentra al michi */
+  .shell-stage {
+    height: 200px;
+  }
+  .shell-box {
+    --w: 29%;
+    height: 150px;
+  }
+  .shell-body {
+    height: 86px;
+  }
+  .shell-lid {
+    left: -2px;
+    right: -2px;
+    bottom: 82px;
+    height: 22px;
+  }
+  .shell-cat {
+    bottom: 30px;
+  }
+  .shell-cat .cat,
+  .shell-hider .cat {
+    width: 68px;
+    height: auto;
+  }
+
+  /* Rasca y gana */
+  .scratch-tickets {
+    gap: 6px;
+  }
+  .ticket-option {
+    padding: 10px 4px;
+  }
+  .ticket-option small {
+    font-size: 0.66rem;
+  }
+  .scratch-card {
+    max-width: 330px;
+    padding: 12px;
+  }
+  .scratch-cell {
+    font-size: 2rem;
+  }
+
+  /* Carrera */
+  .race-track {
+    padding: 8px 8px 8px 6px;
+    border-width: 4px;
+  }
+  .lane {
+    height: 44px;
+    grid-template-columns: 20px 50px 1fr 6px;
+    gap: 6px;
+  }
+  .lane-name {
+    font-size: 0.74rem;
+  }
+  .runner .cat {
+    width: 36px;
+    height: auto;
+  }
+  .runner {
+    left: calc(var(--pos) * (100% - 36px));
+  }
+  .runner-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .runner-card {
+    gap: 6px;
+    padding: 6px 8px 6px 4px;
+  }
+  .runner-card .cat {
+    width: 34px;
+    height: auto;
+  }
+  .runner-card strong {
+    font-size: 0.86rem;
+  }
+  .runner-card small {
+    font-size: 0.68rem;
+  }
+  .odds {
+    font-size: 0.95rem;
+  }
+
+  /* Solitario */
+  .diff-card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 12px 14px;
+    column-gap: 12px;
+  }
+  .diff-card .cat {
+    width: 44px;
+    height: auto;
+  }
+  .diff-card small {
+    flex-basis: 100%;
+  }
+  .diff-mult {
+    margin-left: auto;
+    font-size: 1.3rem;
+  }
 }

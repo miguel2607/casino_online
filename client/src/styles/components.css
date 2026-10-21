@@ -1314,3 +1314,128 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ================= Ajustes táctiles y para celular ================= */
+button,
+a,
+.pcard,
+.rt-cell {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 640px) {
+  /* iOS hace zoom en campos con letra menor a 16px */
+  input,
+  textarea,
+  select,
+  .field input,
+  .field textarea {
+    font-size: 16px;
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .game-card {
+    border-radius: var(--radius);
+  }
+  .game-card-art {
+    height: 92px;
+    padding: 0 10px;
+  }
+  .game-card-emoji {
+    font-size: 2.2rem;
+  }
+  .game-card-cat {
+    width: 46px;
+    height: auto;
+  }
+  .game-card-tag {
+    top: 6px;
+    right: 6px;
+    font-size: 0.6rem;
+    padding: 2px 7px;
+  }
+  .game-card-body {
+    padding: 10px 12px 12px;
+  }
+  .game-card-body h3 {
+    font-size: 0.98rem;
+  }
+  .game-card-body p {
+    font-size: 0.76rem;
+  }
+
+  .hero-balance strong {
+    font-size: 1.8rem;
+  }
+  .hero-actions .btn {
+    width: 100%;
+  }
+  .recent-strip,
+  .reward-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 12px 14px;
+  }
+  .stat-card strong {
+    font-size: 1.3rem;
+  }
+  .balance-box {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+  .result-banner {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .result-banner .cat {
+    width: 44px;
+    height: auto;
+  }
+  .result-text strong {
+    font-size: 1.05rem;
+  }
+  .result-amount {
+    font-size: 1.15rem;
+  }
+  .modal-backdrop {
+    align-items: end;
+    padding: 0;
+  }
+  .modal {
+    max-width: none !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 92vh;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .toasts {
+    left: 16px;
+    right: 16px;
+  }
+  .toast {
+    max-width: none;
+  }
+}
+@media (max-width: 380px) {
+  .brand span {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .hide-sm {
+    display: none;
+  }
+}
