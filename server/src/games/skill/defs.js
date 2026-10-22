@@ -188,16 +188,20 @@ const flappy = arcade({
   summary: (v) => `Pasaste ${v} ovillos`,
 });
 
+// Contrarreloj: 105 m a 11 m/s (~9,5 s sin choques). Igual que RUNNER_SOLO en client/src/arcade/engines.js
+const RUNNER_MIN_SECONDS = 105 / 11 - 0.3;
 const runner = arcade({
   label: 'Michi Runner',
   table: [
-    [2200, 8],
-    [1400, 4],
-    [800, 2],
-    [400, 1],
+    [10, 10],
+    [11.2, 5],
+    [12.6, 3],
+    [14, 2],
+    [15, 1],
   ],
-  plausible: (v, secs) => v <= secs * 40 + 60,
-  summary: (v) => `${Math.round(v)} puntos corriendo`,
+  higherIsBetter: false,
+  plausible: (v, secs) => v >= RUNNER_MIN_SECONDS && v <= secs + 2,
+  summary: (v) => `Llegó a la meta en ${v.toFixed(2)} s${v > 17 ? ' (el premio llega hasta 15 s)' : ''}`,
 });
 
 const kart = arcade({

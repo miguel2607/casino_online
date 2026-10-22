@@ -3,7 +3,7 @@ import RunnerGame from '../../arcade/RunnerGame.jsx';
 import KartGame from '../../arcade/KartGame.jsx';
 import FlappyGame from '../../arcade/FlappyGame.jsx';
 import SprintGame from '../../arcade/SprintGame.jsx';
-import { SPRINT } from '../../arcade/engines.js';
+import { RUNNER_SOLO, SPRINT, runnerMultiplier } from '../../arcade/engines.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useSkillGame } from '../../hooks/gameHooks.js';
 
@@ -18,18 +18,27 @@ export function RunnerPage() {
       wide
       title="Michi Runner"
       emoji="🏃"
-      subtitle="Salta pepinos y perros, agáchate ante los pájaros y recoge pescaditos"
-      controls="Celular: toca la pantalla o el botón para saltar y mantén «Agacharse». PC: espacio o ↑ para saltar, ↓ para agacharse. Cada pescadito vale 10 puntos."
-      table={[
-        ['2.200 puntos', 8],
-        ['1.400 puntos', 4],
-        ['800 puntos', 2],
-        ['400 puntos', 1],
-      ]}
+      subtitle="Contrarreloj: llega a la meta en 10 segundos o menos para el premio máximo"
+      controls="Cada choque te frena y te baja el multiplicador. Celular: toca la pantalla o el botón para saltar y mantén «Agacharse». PC: espacio o ↑ para saltar, ↓ para agacharse."
+      table={RUNNER_SOLO.table.map(([t, m]) => [`Llegar en ${t.toFixed(t % 1 ? 1 : 0).replace('.', ',')} s o menos`, m])}
       skill={skill}
       canForfeit={false}
     >
-      {s && <RunnerGame key={s.id} seed={s.seed} myColor={user.avatar} onEnd={({ score }) => !skill.result && skill.finish({ score }).catch(() => {})} />}
+      {s && (
+        <RunnerGame
+          key={s.id}
+          seed={s.seed}
+          race
+          length={RUNNER_SOLO.length}
+          speed={RUNNER_SOLO.speed}
+          firstObstacleAt={14}
+          maxTime={RUNNER_SOLO.maxTime}
+          stumble={RUNNER_SOLO.stumble}
+          multiplierFor={runnerMultiplier}
+          myColor={user.avatar}
+          onEnd={({ time }) => !skill.result && skill.finish({ score: time }).catch(() => {})}
+        />
+      )}
     </SkillShell>
   );
 }

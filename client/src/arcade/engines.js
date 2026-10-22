@@ -20,15 +20,33 @@ const OBSTACLES = {
   bird: { w: 0.8, h: 0.55, y: 0.62, emoji: '🐦' },
 };
 
-export const runnerSpeedAt = (d, race) => (race ? RUNNER.raceSpeed : Math.min(RUNNER.maxSpeed, RUNNER.startSpeed + d / 120));
+// Michi Runner individual: contra el reloj. Sin choques se llega en ~9,5 s; cada choque cuesta ~1,5 s.
+// Debe coincidir con la tabla del servidor (server/src/games/skill/defs.js).
+export const RUNNER_SOLO = {
+  speed: 11,
+  length: 105,
+  maxTime: 25,
+  stumble: 1.2, // segundos parado tras chocar: correr sin saltar no debe dar premio
+  table: [
+    [10, 10],
+    [11.2, 5],
+    [12.6, 3],
+    [14, 2],
+    [15, 1],
+  ],
+};
+export const runnerMultiplier = (t) => RUNNER_SOLO.table.find(([limit]) => t <= limit)?.[1] ?? 0;
 
-export function buildRunnerCourse(seed, length, race) {
+export const runnerSpeedAt = (d, race, speed = RUNNER.raceSpeed) =>
+  race ? speed : Math.min(RUNNER.maxSpeed, RUNNER.startSpeed + d / 120);
+
+export function buildRunnerCourse(seed, length, race, speed = RUNNER.raceSpeed, firstAt = 18) {
   const rnd = mulberry32(seed);
   const obstacles = [];
   const fish = [];
-  let x = 18;
+  let x = firstAt;
   while (x < length - 6) {
-    const v = runnerSpeedAt(x, race);
+    const v = runnerSpeedAt(x, race, speed);
     const roll = rnd();
     const type = x < 120 ? (roll < 0.6 ? 'cucumber' : 'dog') : roll < 0.42 ? 'cucumber' : roll < 0.72 ? 'dog' : 'bird';
     obstacles.push({ x, type, ...OBSTACLES[type] });

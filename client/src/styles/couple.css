@@ -473,20 +473,23 @@
   margin: 0 auto;
 }
 .c4-board {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  padding: 10px;
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
   border-radius: 22px;
   background: linear-gradient(180deg, #3d6fd8, #23408a);
   border: 4px solid #1c3370;
   box-shadow: var(--shadow), inset 0 2px 0 rgba(255, 255, 255, 0.25);
 }
+/* Tamaños en px desde JS: en Safari los botones no se estiran dentro de un grid */
 .c4-col {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 3px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 3px 0;
   border-radius: 999px;
   transition: background 0.15s;
 }
@@ -498,24 +501,24 @@
 }
 .c4-cell {
   position: relative;
-  aspect-ratio: 1;
+  display: block;
+  flex-shrink: 0;
   border-radius: 50%;
   background: #0f1d44;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6);
-  overflow: visible;
 }
 .c4-cell.is-line {
   box-shadow: 0 0 0 3px var(--gold), 0 0 14px rgba(255, 207, 90, 0.9);
 }
 .c4-piece {
   position: absolute;
-  inset: 4%;
-  display: grid;
-  place-items: center;
-}
-.c4-piece .cat {
-  width: 100%;
-  height: auto;
+  top: 4%;
+  left: 4%;
+  right: 4%;
+  bottom: 4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .c4-piece.is-last {
   animation: c4-drop 0.45s cubic-bezier(0.35, 0, 0.55, 1.35);
@@ -752,7 +755,6 @@
 
 /* ---- iOS < 15 no soporta aspect-ratio: alturas de respaldo con padding ---- */
 @supports not (aspect-ratio: 1 / 1) {
-  .c4-cell::before,
   .scratch-cell::before,
   .avatar-option::before {
     content: '';
