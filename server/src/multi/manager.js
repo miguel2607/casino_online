@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { pool, withTx } from '../db.js';
 import { HttpError, bad } from '../errors.js';
-import { MAX_BET, GAME_LABELS, placeBet, settle } from '../wallet.js';
+import { MAX_BET, GAME_LABELS, moveStars, placeBet, settle } from '../wallet.js';
 import { emitTo } from '../bus.js';
 import { getPartner } from '../couple.js';
 import { MULTI_GAMES } from './games/index.js';
@@ -25,6 +25,20 @@ function withLock(id, fn) {
 async function emitStars(...userIds) {
   const { rows } = await pool.query('SELECT id, stars FROM users WHERE id = ANY($1)', [userIds]);
   for (const r of rows) emitTo(r.id, 'stars', { stars: r.stars });
+}
+
+/** Cierra partidas activas de juegos que ya no existen y devuelve las apuestas (se llama al arrancar). */
+export async function closeRetiredMatches() {
+  await withTx(async (c) => {
+    const { rows } = await c.query(`SELECT * FROM matches WHERE status = 'active' AND NOT (game = ANY($1)) FOR UPDATE`, [Object.keys(MULTI_GAMES)]);
+    for (const m of rows) {
+      for (const uid of [m.player_a, m.player_b]) {
+        if (m.stake > 0) await moveStars(c, uid, m.stake, 'refund', `Devolución: ${GAME_LABELS[gameKey(m.game)] || 'juego retirado'}`);
+      }
+      await c.query(`UPDATE matches SET status = 'finished', result = $2, updated_at = now() WHERE id = $1`, [m.id, { retired: true }]);
+    }
+    if (rows.length) console.log(`🧹 ${rows.length} partida(s) de juegos retirados cerradas y reembolsadas`);
+  });
 }
 
 export async function activeMatchFor(userId) {

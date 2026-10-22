@@ -29,6 +29,7 @@ export const GAME_LABELS = {
   mp_battleship: 'Batalla Naval de Michis',
   mp_dots: 'Puntos y cajas',
   mp_ultimate: 'Tres en raya gigante',
+  mp_tictactoe: 'Tres en raya',
   mp_duel2048: 'Duelo de 2048',
   mp_duelwordle: 'Duelo de Wordle',
   mp_stop: 'Stop / Basta',

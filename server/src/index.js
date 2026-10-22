@@ -14,6 +14,7 @@ import rewardRoutes from './routes/rewards.js';
 import adminRoutes from './routes/admin.js';
 import coupleRoutes from './routes/couple.js';
 import { attachRealtime } from './realtime.js';
+import { closeRetiredMatches } from './multi/manager.js';
 import gameRoutes from './games/index.js';
 
 const app = express();
@@ -68,6 +69,7 @@ app.use((err, req, res, next) => {
 try {
   await ensureDatabase();
   await migrate();
+  await closeRetiredMatches();
 } catch (err) {
   console.error('❌ No se pudo conectar a PostgreSQL:', err.message);
   console.error('   Revisa DATABASE_URL en server/.env');

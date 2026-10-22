@@ -6,7 +6,7 @@ import blackjack from './blackjack.js';
 import race from './race.js';
 import battleship from './battleship.js';
 import dots from './dots.js';
-import ultimate from './ultimate.js';
+import tictactoe from './tictactoe.js';
 import duel2048 from './duel2048.js';
 import duelwordle from './duelwordle.js';
 import stop from './stop.js';
@@ -34,7 +34,7 @@ export const MULTI_GAMES = {
   race,
   battleship,
   dots,
-  ultimate,
+  tictactoe,
   duel2048,
   duelwordle,
   stop,

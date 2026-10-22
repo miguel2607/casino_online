@@ -178,11 +178,11 @@ export const MULTI_GAMES = [
     gradient: 'linear-gradient(135deg, #8b5cf6, #4c1d95)',
   },
   {
-    id: 'ultimate',
+    id: 'tictactoe',
     mode: 'vs',
-    name: 'Tres en raya gigante',
-    emoji: '#️⃣',
-    tagline: 'Un tres en raya dentro de otro',
+    name: 'Tres en raya',
+    emoji: '⭕',
+    tagline: 'El clásico: tres michis en línea',
     gradient: 'linear-gradient(135deg, #ec4899, #831843)',
   },
   {
@@ -273,4 +273,6 @@ export const GAME_BY_ID = Object.fromEntries([
   ...GAMES.map((g) => [g.id, g]),
   ...SKILL_GAMES.map((g) => [`sk_${g.id}`, g]),
   ...MULTI_GAMES.map((g) => [`mp_${g.id}`, { ...g, name: `${g.name} 💞` }]),
+  // Juegos retirados: se conservan para mostrar el historial
+  ['mp_ultimate', { id: 'ultimate', name: 'Tres en raya gigante 💞', emoji: '#️⃣' }],
 ]);

@@ -46,10 +46,8 @@ export function attachRealtime(httpServer) {
     socket.join(`user:${userId}`);
     if (markOnline(userId)) notifyPartnerPresence(userId, true).catch(() => {});
 
-    const partner = await getPartner(pool, userId).catch(() => null);
-    socket.emit('presence', { online: isOnline(partner?.id) });
-    socket.emit('invites', manager.invitesFor(userId));
-
+    // Los handlers se registran antes de cualquier await: si no, un mensaje que llegue
+    // justo al conectar (p. ej. una invitación) se perdería sin respuesta.
     socket.on('invite:send', handle(socket, (u, p) => manager.sendInvite(u, p)));
     socket.on('invite:respond', handle(socket, (u, p) => manager.respondInvite(u, p)));
     socket.on('invite:cancel', handle(socket, (u, p) => manager.cancelInvite(u, p)));
@@ -87,6 +85,11 @@ export function attachRealtime(httpServer) {
     socket.on('disconnect', () => {
       if (markOffline(userId)) notifyPartnerPresence(userId, false).catch(() => {});
     });
+
+    // Estado inicial (ya con todos los handlers listos)
+    socket.emit('invites', manager.invitesFor(userId));
+    const partner = await getPartner(pool, userId).catch(() => null);
+    socket.emit('presence', { online: isOnline(partner?.id) });
   });
 
   return io;

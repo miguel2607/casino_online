@@ -17,7 +17,7 @@ import BlackjackTable from '../games/multi/BlackjackTable.jsx';
 import RaceDuel from '../games/multi/RaceDuel.jsx';
 import BattleshipGame from '../games/multi/BattleshipGame.jsx';
 import DotsGame from '../games/multi/DotsGame.jsx';
-import UltimateGame from '../games/multi/UltimateGame.jsx';
+import TicTacToeGame from '../games/multi/TicTacToeGame.jsx';
 import Duel2048Game from '../games/multi/Duel2048Game.jsx';
 import DuelWordleGame from '../games/multi/DuelWordleGame.jsx';
 import StopGame from '../games/multi/StopGame.jsx';
@@ -37,7 +37,7 @@ const COMPONENTS = {
   race: RaceDuel,
   battleship: BattleshipGame,
   dots: DotsGame,
-  ultimate: UltimateGame,
+  tictactoe: TicTacToeGame,
   duel2048: Duel2048Game,
   duelwordle: DuelWordleGame,
   stop: StopGame,
