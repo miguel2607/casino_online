@@ -3,6 +3,7 @@ import RunnerGame from '../../arcade/RunnerGame.jsx';
 import KartGame from '../../arcade/KartGame.jsx';
 import FlappyGame from '../../arcade/FlappyGame.jsx';
 import SprintGame from '../../arcade/SprintGame.jsx';
+import { SPRINT } from '../../arcade/engines.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useSkillGame } from '../../hooks/gameHooks.js';
 
@@ -44,10 +45,10 @@ export function KartPage() {
       subtitle="Cambia de carril para esquivar obstáculos; cada vez vas más rápido"
       controls="Celular: toca la mitad izquierda o derecha (o los botones). PC: ← → o A D. Cada pescadito vale 15 puntos."
       table={[
-        ['2.800 puntos', 8],
-        ['1.800 puntos', 4],
-        ['1.000 puntos', 2],
-        ['500 puntos', 1],
+        ['5.500 puntos', 8],
+        ['3.500 puntos', 4],
+        ['2.000 puntos', 2],
+        ['1.000 puntos', 1],
       ]}
       skill={skill}
       canForfeit={false}
@@ -89,18 +90,18 @@ export function SprintPage() {
     <SkillShell
       title="Sprint de 100 metros"
       emoji="⚡"
-      subtitle="Alterna dos botones lo más rápido posible para que tu michi corra"
-      controls="Celular: usa un pulgar en cada botón. PC: ← y → (o A y D) alternando."
+      subtitle="Llega a la meta en 9 segundos o menos alternando los dos botones"
+      controls="Celular: usa un pulgar en cada botón. PC: ← y → (o A y D) alternando. Si tardas más de 9 s pierdes la entrada."
       table={[
-        ['Menos de 9,6 s', 8],
-        ['Menos de 10,5 s', 4],
-        ['Menos de 11,5 s', 2],
-        ['Menos de 13 s', 1],
+        ['9,00 s o menos', 2],
+        ['8,50 s o menos', 3],
+        ['8,00 s o menos', 5],
+        ['7,50 s o menos', 10],
       ]}
       skill={skill}
       canForfeit={false}
     >
-      {s && <SprintGame key={s.id} color={user.avatar} onFinish={(time) => !skill.result && skill.finish({ score: time }).catch(() => {})} />}
+      {s && <SprintGame key={s.id} color={user.avatar} limit={SPRINT.limit} onFinish={(time) => !skill.result && skill.finish({ score: time }).catch(() => {})} />}
     </SkillShell>
   );
 }

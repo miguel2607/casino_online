@@ -40,9 +40,9 @@ export function buildRunnerCourse(seed, length, race) {
 }
 
 // ---------------- Michi Kart ----------------
-export const KART = { lanes: 3, startSpeed: 12, maxSpeed: 26, switchTime: 0.14 };
+export const KART = { lanes: 3, startSpeed: 18, maxSpeed: 38, switchTime: 0.11 };
 const KART_OBSTACLES = ['🚧', '📦', '🐕', '🛢️'];
-export const kartSpeedAt = (d) => Math.min(KART.maxSpeed, KART.startSpeed + d / 80);
+export const kartSpeedAt = (d) => Math.min(KART.maxSpeed, KART.startSpeed + d / 50);
 
 export function buildKartCourse(seed, length = 12000) {
   const rnd = mulberry32(seed);
@@ -75,4 +75,5 @@ export function buildFlappyPipes(seed, count = 400) {
 }
 
 // ---------------- Sprint ----------------
-export const SPRINT = { length: 100, impulse: 1.25, drag: 1.0, maxSpeed: 12, stumble: 0.7 };
+// Con ~10 toques/s se llega en unos 9 s; el tope de 16 m/s permite bajar de 8 s tocando muy rápido
+export const SPRINT = { length: 100, impulse: 1.25, drag: 1.0, maxSpeed: 16, stumble: 0.7, limit: 9 };

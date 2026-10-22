@@ -3,7 +3,7 @@ import Cat from '../components/Cat.jsx';
 import { useElementWidth, useKeys } from '../hooks/gameHooks.js';
 import { KART, buildKartCourse, kartSpeedAt } from './engines.js';
 
-const VIEW_AHEAD = 26; // metros visibles por delante
+const VIEW_AHEAD = 42; // metros visibles por delante (más velocidad = hay que ver más lejos para reaccionar)
 
 /** Michi Kart: tres carriles, esquiva obstáculos y recoge pescaditos. */
 export default function KartGame({ seed, color = 'orange', onEnd }) {

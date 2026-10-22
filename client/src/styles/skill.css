@@ -910,3 +910,38 @@
   transform: none;
   box-shadow: 0 6px 0 #a3245d;
 }
+
+/* Panel de premio del 2048: deja claro que cuenta la ficha más alta */
+.prize-panel {
+  display: flex;
+  margin-bottom: 12px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  background: rgba(255, 207, 90, 0.08);
+  border: 1px solid rgba(255, 207, 90, 0.35);
+}
+.prize-panel > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 6px;
+}
+.prize-panel > div + div {
+  border-left: 1px solid rgba(255, 207, 90, 0.25);
+}
+.prize-panel span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.prize-panel strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #ffe6a6;
+}
+.prize-panel small {
+  font-weight: 800;
+  color: var(--gold);
+}

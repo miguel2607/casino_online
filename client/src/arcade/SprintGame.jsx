@@ -11,7 +11,7 @@ const PULSE_MS = 120;
  * - teamMode: solo cuenta toques y los envía (el servidor mueve al michi del equipo)
  * - runners: otros corredores a dibujar [{ key, label, color, d }]
  */
-export default function SprintGame({ startAt, now, color = 'orange', runners = [], teamMode = false, teamD = 0, onPulse, onFinish, onTaps }) {
+export default function SprintGame({ startAt, now, color = 'orange', runners = [], teamMode = false, teamD = 0, limit, onPulse, onFinish, onTaps }) {
   const clock = now || (() => Date.now());
   const startRef = useRef(startAt ?? null);
   const sim = useRef({ d: 0, v: 0, t: 0, lastSide: null, done: false, pendingTaps: 0 });
@@ -77,7 +77,9 @@ export default function SprintGame({ startAt, now, color = 'orange', runners = [
   return (
     <div className="sprint">
       <div className="arcade-hud">
-        <span>⏱ {state.t.toFixed(2)} s</span>
+        <span className={limit && state.t > limit ? 'text-red' : ''}>
+          ⏱ {state.t.toFixed(2)} s{limit ? ` / meta ${limit.toFixed(2)} s` : ''}
+        </span>
         {!teamMode && <span>🏃 {Math.round(state.d)} / 100 m</span>}
         {teamMode && <span>🤝 {Math.round(teamD)} / 100 m</span>}
       </div>

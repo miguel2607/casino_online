@@ -20,11 +20,13 @@ const elapsedSec = (state) => (Date.now() - state.startedAt) / 1000;
 
 const game2048 = {
   label: '2048 de Michis',
+  // El premio depende de la ficha más alta (exponente: 7 = 128, 8 = 256, …), no de los puntos
   table: [
-    [11, 10],
-    [10, 4],
-    [9, 2],
-    [8, 1],
+    [11, 15],
+    [10, 6],
+    [9, 3],
+    [8, 1.5],
+    [7, 1],
   ],
   start: () => ({ seed: newSeed(), moves: [] }),
   view: (s) => ({ seed: s.seed, moves: s.moves }),
@@ -38,7 +40,7 @@ const game2048 = {
     const top = g2048.maxTile(game);
     return {
       multiplier: tier(top, this.table),
-      summary: `Ficha máxima ${2 ** top} · ${game.score} puntos`,
+      summary: `Ficha más alta: ${2 ** top}${top < 7 ? ' (el premio empieza al formar la ficha 128)' : ''} · ${game.score} puntos`,
       details: { score: game.score, maxTile: 2 ** top, moves: moves.length },
     };
   },
@@ -200,11 +202,12 @@ const runner = arcade({
 
 const kart = arcade({
   label: 'Michi Kart',
+  // Más rápido que antes (18 → 38 m/s): se recorre más distancia, así que las metas también suben
   table: [
-    [2800, 8],
-    [1800, 4],
-    [1000, 2],
-    [500, 1],
+    [5500, 8],
+    [3500, 4],
+    [2000, 2],
+    [1000, 1],
   ],
   plausible: (v, secs) => v <= secs * 55 + 80,
   summary: (v) => `${Math.round(v)} puntos en la pista`,
@@ -212,15 +215,16 @@ const kart = arcade({
 
 const sprint = arcade({
   label: 'Sprint de 100 metros',
+  // Tiempo máximo para ganar: 9 s; más lento pierde la entrada
   table: [
-    [9.6, 8],
-    [10.5, 4],
-    [11.5, 2],
-    [13, 1],
+    [7.5, 10],
+    [8, 5],
+    [8.5, 3],
+    [9, 2],
   ],
   higherIsBetter: false,
   plausible: (v, secs) => v >= 5 && v <= secs + 2,
-  summary: (v) => `100 metros en ${v.toFixed(2)} s`,
+  summary: (v) => `100 metros en ${v.toFixed(2)} s${v > 9 ? ' (el máximo para ganar es 9 s)' : ''}`,
 });
 
 export const SKILL_GAMES = { g2048: game2048, mines, sudoku, simon, wordle, flappy, runner, kart, sprint };
