@@ -60,6 +60,20 @@ En **Pareja** cada uno tiene un código de invitación (por ejemplo `MICHI-4F7KQ
 
 Los juegos individuales siguen funcionando igual para cuando cada uno quiera jugar solo.
 
+### Juegos de habilidad (individuales)
+
+Se paga una entrada y se cobra según el desempeño: 2048 de Michis, Buscaminas, Michi-Wordle, Sudoku (4×4, 6×6, 9×9), Simón Michi, Flappy Michi, Michi Runner, Michi Kart y Sprint de 100 m. En los de lógica el servidor reproduce la partida para validarla; en los de acción revisa que el puntaje sea posible.
+
+### En pareja: uno contra el otro
+
+Piedra papel o tijera · Conecta 4 · Memoria · Duelo de Solitario · Carrera en pareja · Batalla Naval · Stop/Basta · Duelo de reflejos · Puntos y cajas · Tres en raya gigante · Duelo de 2048 · Duelo de Wordle · Carrera fantasma · Sprint en vivo.
+
+### En pareja: en equipo contra el casino
+
+Blackjack en pareja · Dibuja y adivina · Memoria contra el reloj · Sopa de letras · Simón en equipo · Relevos · Sprint en equipo. Si el equipo cumple el reto, los dos cobran.
+
+Todos se juegan con el dedo en el celular o con teclado y mouse en PC.
+
 ## Panel de administración
 
 - **Canjes**: marcar como cumplido (con mensaje para ella) o cancelar y devolver las estrellitas.

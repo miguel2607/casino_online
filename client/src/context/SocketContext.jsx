@@ -18,6 +18,7 @@ export function SocketProvider({ children }) {
   const [stickers, setStickers] = useState([]);
   const [rewardsVersion, setRewardsVersion] = useState(0);
   const listeners = useRef(new Set());
+  const pulseListeners = useRef(new Set());
   const userId = user?.id;
   // navigate cambia en cada ruta: lo guardamos en un ref para no reconectar el socket
   const navigateRef = useRef(navigate);
@@ -35,6 +36,7 @@ export function SocketProvider({ children }) {
     socket.on('stars', ({ stars }) => setStars(stars));
     socket.on('match:start', ({ matchId }) => navigateRef.current(`/pareja/partida/${matchId}`));
     socket.on('match:update', (m) => listeners.current.forEach((fn) => fn(m)));
+    socket.on('match:pulse', (p) => pulseListeners.current.forEach((fn) => fn(p)));
     socket.on('invite:declined', ({ by }) => toast.info(`${by} no puede jugar ahora 😿`));
     socket.on('couple', ({ linked, by }) => {
       refresh();
@@ -86,12 +88,19 @@ export function SocketProvider({ children }) {
 
   const sendSticker = useCallback((sticker) => socketRef.current?.emit('sticker', { sticker }), []);
 
+  /** Pulsos en tiempo real de una partida (posiciones de carrera, trazos de dibujo…). */
+  const onMatchPulse = useCallback((fn) => {
+    pulseListeners.current.add(fn);
+    return () => pulseListeners.current.delete(fn);
+  }, []);
+  const sendPulse = useCallback((matchId, data) => socketRef.current?.emit('match:pulse', { matchId, data }), []);
+
   const incoming = useMemo(() => invites.filter((i) => i.to.id === userId), [invites, userId]);
   const outgoing = useMemo(() => invites.filter((i) => i.from.id === userId), [invites, userId]);
 
   const value = useMemo(
-    () => ({ connected, partnerOnline, incoming, outgoing, stickers, rewardsVersion, request, onMatchUpdate, sendSticker }),
-    [connected, partnerOnline, incoming, outgoing, stickers, rewardsVersion, request, onMatchUpdate, sendSticker],
+    () => ({ connected, partnerOnline, incoming, outgoing, stickers, rewardsVersion, request, onMatchUpdate, sendSticker, onMatchPulse, sendPulse }),
+    [connected, partnerOnline, incoming, outgoing, stickers, rewardsVersion, request, onMatchUpdate, sendSticker, onMatchPulse, sendPulse],
   );
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 }

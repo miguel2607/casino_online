@@ -145,6 +145,8 @@ async function createMatch(inv) {
   });
   const m = { id: Number(row.id), game: row.game, stake: row.stake, status: 'active', state: row.state, result: null, players: [a, b] };
   matches.set(m.id, m);
+  // Juegos con cuenta regresiva o tiempo límite programan sus temporizadores al empezar
+  def.resume?.(m.state, ctxFor(m));
   await emitStars(a.id, b.id);
   // El blackjack puede terminar al repartir (blackjack del crupier o de ambos)
   if (m.state.finished) await finalize(m);
@@ -181,12 +183,19 @@ async function loadMatch(id) {
 
 function ctxFor(m) {
   return {
-    schedule(ms, fn) {
+    /** Envía un pulso a los dos jugadores (p. ej. posiciones calculadas por el servidor). */
+    emit(data) {
+      for (const p of m.players) emitTo(p.id, 'match:pulse', { matchId: m.id, from: -1, data });
+    },
+    /** Reenvía el estado completo a los dos (útil tras un temporizador sin guardar). */
+    broadcast: () => broadcast(m),
+    // persist: false para bucles rápidos (p. ej. la física de una carrera) que no necesitan guardarse siempre
+    schedule(ms, fn, { persist: save = true } = {}) {
       setTimeout(() => {
         withLock(m.id, async () => {
           if (m.status !== 'active') return;
-          fn(m.state);
-          await persist(m);
+          fn(m.state, ctxFor(m));
+          if (save || m.state.finished) await persist(m);
           if (m.state.finished) await finalize(m);
           broadcast(m);
         }).catch((err) => console.error('Error en temporizador de partida', err));
@@ -203,7 +212,9 @@ function summaryFor(m, idx, outcome) {
   const fin = m.state.finished;
   if (fin.forfeit === idx) return `Te rendiste contra ${other}`;
   if (fin.forfeit === 1 - idx) return `${other} se rindió, ¡ganaste!`;
-  const head = fin.table
+  const head = fin.coop
+    ? `En equipo con ${other}`
+    : fin.table
     ? `Mesa con ${other}`
     : outcome === 'win' ? `Le ganaste a ${other}` : outcome === 'lose' ? `Ganó ${other}` : `Empate con ${other}`;
   return `${head} · ${def.detail(m.state, idx)}`;
@@ -232,7 +243,15 @@ async function finalize(m) {
         details: { matchId: m.id, vs: m.players[1 - i].id },
       });
     }
-    m.result = { winner: fin.winner, payouts, outcomes, forfeit: fin.forfeit ?? null, table: Boolean(fin.table) };
+    m.result = {
+      winner: fin.winner,
+      payouts,
+      outcomes,
+      forfeit: fin.forfeit ?? null,
+      table: Boolean(fin.table),
+      coop: Boolean(fin.coop),
+      success: fin.success ?? null,
+    };
     await c.query(`UPDATE matches SET status = 'finished', result = $2, state = $3, updated_at = now() WHERE id = $1`, [
       m.id,
       m.result,
@@ -294,11 +313,33 @@ export function forfeit(user, { matchId } = {}) {
     const idx = playerIndex(m, user.id);
     if (m.status !== 'active') throw bad('La partida ya terminó');
     const def = MULTI_GAMES[m.game];
-    if (def.forfeit) def.forfeit(m.state, idx);
+    if (def.forfeit) def.forfeit(m.state, idx, ctxFor(m));
     else m.state.finished = { winner: 1 - idx, forfeit: idx };
     await persist(m);
     if (m.state.finished) await finalize(m);
     broadcast(m);
+    return {};
+  });
+}
+
+/**
+ * Pulso en tiempo real (posición en carreras, trazos de dibujo…). No se guarda en la base en cada envío:
+ * el juego actualiza su estado en memoria y decide qué reenviar a la pareja.
+ */
+export function pulse(user, { matchId, data } = {}) {
+  const id = Number(matchId);
+  return withLock(id, async () => {
+    const m = await loadMatch(id);
+    const idx = playerIndex(m, user.id);
+    const def = MULTI_GAMES[m.game];
+    if (m.status !== 'active' || !def.pulse) return {};
+    const out = def.pulse(m.state, idx, data ?? {}, ctxFor(m));
+    if (out != null) emitTo(m.players[1 - idx].id, 'match:pulse', { matchId: m.id, from: idx, data: out });
+    if (m.state.finished) {
+      await persist(m);
+      await finalize(m);
+      broadcast(m);
+    }
     return {};
   });
 }

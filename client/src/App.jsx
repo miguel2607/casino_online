@@ -17,6 +17,12 @@ import Slots from './games/Slots.jsx';
 import HiLo from './games/HiLo.jsx';
 import FindTheCat from './games/FindTheCat.jsx';
 import Scratch from './games/Scratch.jsx';
+import Game2048 from './games/skill/Game2048.jsx';
+import Minesweeper from './games/skill/Minesweeper.jsx';
+import Wordle from './games/skill/Wordle.jsx';
+import Sudoku from './games/skill/Sudoku.jsx';
+import Simon from './games/skill/Simon.jsx';
+import { FlappyPage, KartPage, RunnerPage, SprintPage } from './games/skill/Arcade.jsx';
 
 function Splash() {
   return (
@@ -68,6 +74,15 @@ export default function App() {
         <Route path="juego/mayor-menor" element={<HiLo />} />
         <Route path="juego/encuentra-al-michi" element={<FindTheCat />} />
         <Route path="juego/rasca-y-gana" element={<Scratch />} />
+        <Route path="juego/2048" element={<Game2048 />} />
+        <Route path="juego/buscaminas" element={<Minesweeper />} />
+        <Route path="juego/wordle" element={<Wordle />} />
+        <Route path="juego/sudoku" element={<Sudoku />} />
+        <Route path="juego/simon" element={<Simon />} />
+        <Route path="juego/flappy" element={<FlappyPage />} />
+        <Route path="juego/runner" element={<RunnerPage />} />
+        <Route path="juego/kart" element={<KartPage />} />
+        <Route path="juego/sprint" element={<SprintPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

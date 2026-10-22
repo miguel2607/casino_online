@@ -15,6 +15,18 @@ import MemoryGame from '../games/multi/MemoryGame.jsx';
 import SolitaireDuel from '../games/multi/SolitaireDuel.jsx';
 import BlackjackTable from '../games/multi/BlackjackTable.jsx';
 import RaceDuel from '../games/multi/RaceDuel.jsx';
+import BattleshipGame from '../games/multi/BattleshipGame.jsx';
+import DotsGame from '../games/multi/DotsGame.jsx';
+import UltimateGame from '../games/multi/UltimateGame.jsx';
+import Duel2048Game from '../games/multi/Duel2048Game.jsx';
+import DuelWordleGame from '../games/multi/DuelWordleGame.jsx';
+import StopGame from '../games/multi/StopGame.jsx';
+import ReflexGame from '../games/multi/ReflexGame.jsx';
+import DrawGame from '../games/multi/DrawGame.jsx';
+import MemoryTimeGame from '../games/multi/MemoryTimeGame.jsx';
+import WordSearchGame from '../games/multi/WordSearchGame.jsx';
+import SimonTeamGame from '../games/multi/SimonTeamGame.jsx';
+import { GhostRaceGame, RelayGame, SprintLiveGame, SprintTeamGame } from '../games/multi/RaceGames.jsx';
 
 const COMPONENTS = {
   rps: RpsGame,
@@ -23,6 +35,21 @@ const COMPONENTS = {
   solitaire: SolitaireDuel,
   blackjack: BlackjackTable,
   race: RaceDuel,
+  battleship: BattleshipGame,
+  dots: DotsGame,
+  ultimate: UltimateGame,
+  duel2048: Duel2048Game,
+  duelwordle: DuelWordleGame,
+  stop: StopGame,
+  reflex: ReflexGame,
+  draw: DrawGame,
+  memorytime: MemoryTimeGame,
+  wordsearch: WordSearchGame,
+  simonteam: SimonTeamGame,
+  ghostrace: GhostRaceGame,
+  relay: RelayGame,
+  sprintlive: SprintLiveGame,
+  sprintteam: SprintTeamGame,
 };
 
 /** Colores de ficha de cada jugador: su michi, o uno distinto si eligieron el mismo. */
@@ -38,6 +65,7 @@ function resultTitle(match) {
   if (r.forfeit === match.me) return 'Te rendiste';
   if (r.forfeit === 1 - match.me) return `${other} se rindió, ¡ganaste!`;
   const o = r.outcomes[match.me];
+  if (r.coop) return o === 'win' ? '¡Lo lograron en equipo! 🤝' : o === 'push' ? 'Casi: recuperan la apuesta' : 'Esta vez no lo lograron';
   if (r.table) return o === 'win' ? '¡Le ganaste al crupier!' : o === 'push' ? 'Empate con el crupier' : 'El crupier ganó tu mano';
   return o === 'win' ? `¡Le ganaste a ${other}!` : o === 'lose' ? `Ganó ${other}` : '¡Empate!';
 }
@@ -47,7 +75,7 @@ export default function Match() {
   const matchId = Number(id);
   const navigate = useNavigate();
   const toast = useToast();
-  const { request, onMatchUpdate, connected } = useSocket();
+  const { request, onMatchUpdate, onMatchPulse, sendPulse, connected } = useSocket();
   const [match, setMatch] = useState(null);
   const [error, setError] = useState('');
   const [confirmForfeit, setConfirmForfeit] = useState(false);
@@ -74,6 +102,16 @@ export default function Match() {
         throw err;
       }),
     [matchId, request, toast],
+  );
+
+  const pulse = useCallback((data) => sendPulse(matchId, data), [matchId, sendPulse]);
+  // Solo los pulsos de esta partida y de la pareja (o del servidor)
+  const onPulse = useCallback(
+    (fn) =>
+      onMatchPulse((p) => {
+        if (p.matchId === matchId) fn(p.data, p.from);
+      }),
+    [matchId, onMatchPulse],
   );
 
   const forfeit = async () => {
@@ -110,6 +148,7 @@ export default function Match() {
   const finished = match.status === 'finished';
   const me = match.me;
   const ordered = [me, 1 - me];
+  const team = info.mode === 'team';
 
   return (
     <div className="game-page game-page-wide match-page">
@@ -124,8 +163,8 @@ export default function Match() {
           </h1>
           <p>
             {match.stake
-              ? match.game === 'blackjack'
-                ? `Apuesta de ${fmt(match.stake)} ⭐ cada uno contra el crupier`
+              ? team
+                ? `En equipo · ${fmt(match.stake)} ⭐ cada uno contra el casino`
                 : `Bote: ${fmt(match.stake * 2)} ⭐`
               : 'Partida amistosa'}
           </p>
@@ -139,10 +178,10 @@ export default function Match() {
             <strong>{i === me ? 'Tú' : match.players[i].displayName}</strong>
           </div>
         ))}
-        <span className="versus-vs">VS</span>
+        <span className="versus-vs">{team ? '🤝' : 'VS'}</span>
       </div>
 
-      <Game match={match} act={act} colors={colors} />
+      <Game match={match} act={act} colors={colors} pulse={pulse} onPulse={onPulse} />
 
       {finished && (
         <>
@@ -196,7 +235,9 @@ export default function Match() {
         <p>
           {match.game === 'blackjack'
             ? 'Perderás tu apuesta de esta mano; tu pareja sigue jugando la suya.'
-            : `${match.players[1 - me].displayName} ganará la partida${match.stake ? ` y el bote de ${fmt(match.stake * 2)} ⭐` : ''}.`}
+            : team
+              ? 'El equipo pierde la partida y las apuestas de los dos.'
+              : `${match.players[1 - me].displayName} ganará la partida${match.stake ? ` y el bote de ${fmt(match.stake * 2)} ⭐` : ''}.`}
         </p>
       </Modal>
     </div>

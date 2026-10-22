@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { useSocket } from '../context/SocketContext.jsx';
 import { api, post } from '../api.js';
-import { GAMES, GAME_BY_ID } from '../gameList.js';
+import { GAMES, GAME_BY_ID, SKILL_GAMES } from '../gameList.js';
 import Cat from '../components/Cat.jsx';
 import Stars from '../components/Stars.jsx';
 import Celebration from '../components/Celebration.jsx';
@@ -98,27 +98,32 @@ export default function Lobby() {
         <span className="btn btn-primary btn-sm">{user.partnerId ? 'Jugar' : 'Vincular'}</span>
       </Link>
 
-      <section>
-        <div className="section-head">
-          <h2>Juegos</h2>
-          <span className="muted">{GAMES.length} mesas abiertas</span>
-        </div>
-        <div className="game-grid">
-          {GAMES.map((g) => (
-            <Link key={g.id} to={g.path} className="game-card" style={{ '--g': g.gradient }}>
-              <div className="game-card-art">
-                <span className="game-card-emoji">{g.emoji}</span>
-                <Cat color={g.cat.color} mood={g.cat.mood} size={64} className="game-card-cat" />
-                <span className="game-card-tag">{g.tag}</span>
-              </div>
-              <div className="game-card-body">
-                <h3>{g.name}</h3>
-                <p>{g.tagline}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {[
+        { title: 'Habilidad', hint: 'Gana según qué tan bien juegues', games: SKILL_GAMES },
+        { title: 'Suerte', hint: 'Casino clásico de azar', games: GAMES },
+      ].map((section) => (
+        <section key={section.title}>
+          <div className="section-head">
+            <h2>{section.title}</h2>
+            <span className="muted">{section.hint}</span>
+          </div>
+          <div className="game-grid">
+            {section.games.map((g) => (
+              <Link key={g.id} to={g.path} className="game-card" style={{ '--g': g.gradient }}>
+                <div className="game-card-art">
+                  <span className="game-card-emoji">{g.emoji}</span>
+                  <Cat color={g.cat.color} mood={g.cat.mood} size={64} className="game-card-cat" />
+                  <span className="game-card-tag">{g.tag}</span>
+                </div>
+                <div className="game-card-body">
+                  <h3>{g.name}</h3>
+                  <p>{g.tagline}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
 
       {recent.length > 0 && (
         <section>

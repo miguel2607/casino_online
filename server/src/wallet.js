@@ -9,6 +9,16 @@ export const GAME_LABELS = {
   hilo: 'Mayor o Menor',
   shell: 'Encuentra al Michi',
   scratch: 'Rasca y Gana',
+  // Habilidad (individual)
+  sk_g2048: '2048 de Michis',
+  sk_mines: 'Buscaminas de Michis',
+  sk_sudoku: 'Sudoku de Michis',
+  sk_simon: 'Simón Michi',
+  sk_wordle: 'Michi-Wordle',
+  sk_flappy: 'Flappy Michi',
+  sk_runner: 'Michi Runner',
+  sk_kart: 'Michi Kart',
+  sk_sprint: 'Sprint de 100 metros',
   // En pareja (tiempo real)
   mp_rps: 'Piedra, papel o tijera',
   mp_connect4: 'Conecta 4 de Michis',
@@ -16,6 +26,21 @@ export const GAME_LABELS = {
   mp_solitaire: 'Duelo de Solitario',
   mp_blackjack: 'Blackjack en pareja',
   mp_race: 'Carrera en pareja',
+  mp_battleship: 'Batalla Naval de Michis',
+  mp_dots: 'Puntos y cajas',
+  mp_ultimate: 'Tres en raya gigante',
+  mp_duel2048: 'Duelo de 2048',
+  mp_duelwordle: 'Duelo de Wordle',
+  mp_stop: 'Stop / Basta',
+  mp_reflex: 'Duelo de reflejos',
+  mp_draw: 'Dibuja y adivina',
+  mp_memorytime: 'Memoria contra el reloj',
+  mp_wordsearch: 'Sopa de letras en equipo',
+  mp_simonteam: 'Simón en equipo',
+  mp_ghostrace: 'Carrera fantasma',
+  mp_relay: 'Relevos',
+  mp_sprintlive: 'Sprint en vivo',
+  mp_sprintteam: 'Sprint en equipo',
 };
 
 export const MAX_BET = 1_000_000;

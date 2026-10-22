@@ -7,6 +7,7 @@ import slots from './slots.js';
 import hilo from './hilo.js';
 import shell from './shell.js';
 import scratch from './scratch.js';
+import skill from './skill/index.js';
 
 const router = Router();
 router.use('/blackjack', blackjack);
@@ -17,5 +18,6 @@ router.use('/slots', slots);
 router.use('/hilo', hilo);
 router.use('/shell', shell);
 router.use('/scratch', scratch);
+router.use('/skill', skill);
 
 export default router;

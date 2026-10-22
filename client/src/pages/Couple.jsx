@@ -238,33 +238,40 @@ export default function Couple() {
         </div>
       ))}
 
-      <div className="section-head">
-        <h2>Jugar juntos</h2>
-        <span className="muted">{online ? `${partner.displayName} está en línea` : `Invita a ${partner.displayName} cuando se conecte`}</span>
-      </div>
-      <div className="game-grid">
-        {MULTI_GAMES.map((g) => (
-          <button
-            key={g.id}
-            className="game-card game-card-btn"
-            style={{ '--g': g.gradient }}
-            onClick={() => setInviting(g)}
-            disabled={Boolean(info.activeMatch) || outgoing.length > 0}
-          >
-            <div className="game-card-art">
-              <span className="game-card-emoji">{g.emoji}</span>
-              <span className="game-card-duo">
-                <Cat color={user.avatar} mood="happy" size={44} />
-                <Cat color={partner.avatar} mood="wink" size={44} />
-              </span>
-            </div>
-            <div className="game-card-body">
-              <h3>{g.name}</h3>
-              <p>{g.tagline}</p>
-            </div>
-          </button>
-        ))}
-      </div>
+      {[
+        { mode: 'vs', title: 'Uno contra el otro', hint: online ? `${partner.displayName} está en línea` : `Invita a ${partner.displayName} cuando se conecte` },
+        { mode: 'team', title: 'En equipo', hint: 'Juntos contra el casino: ganan o pierden los dos' },
+      ].map((section) => (
+        <section key={section.mode}>
+          <div className="section-head">
+            <h2>{section.title}</h2>
+            <span className="muted">{section.hint}</span>
+          </div>
+          <div className="game-grid">
+            {MULTI_GAMES.filter((g) => g.mode === section.mode).map((g) => (
+              <button
+                key={g.id}
+                className="game-card game-card-btn"
+                style={{ '--g': g.gradient }}
+                onClick={() => setInviting(g)}
+                disabled={Boolean(info.activeMatch) || outgoing.length > 0}
+              >
+                <div className="game-card-art">
+                  <span className="game-card-emoji">{g.emoji}</span>
+                  <span className="game-card-duo">
+                    <Cat color={user.avatar} mood="happy" size={44} />
+                    <Cat color={partner.avatar} mood="wink" size={44} />
+                  </span>
+                </div>
+                <div className="game-card-body">
+                  <h3>{g.name}</h3>
+                  <p>{g.tagline}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
 
       <div className="panel sticker-panel">
         <h3 className="panel-title">Mándale un sticker</h3>
@@ -296,7 +303,7 @@ export default function Couple() {
           <div className="form-grid">
             <p className="muted">{inviting.tagline}.</p>
             <div className="field">
-              <span>Apuesta de cada uno {inviting.id === 'blackjack' ? '(contra el crupier)' : '(el ganador se lleva el bote)'}</span>
+              <span>Apuesta de cada uno {inviting.mode === 'team' ? '(juntos contra el casino)' : '(el ganador se lleva el bote)'}</span>
               <div className="chip-row">
                 {STAKES.map((s) => (
                   <button key={s} type="button" className={`pill ${stake === s ? 'is-active' : ''}`} onClick={() => setStake(s)} disabled={s > user.stars}>
@@ -317,7 +324,7 @@ export default function Couple() {
                 </div>
               </div>
             )}
-            {stake > 0 && inviting.id !== 'blackjack' && (
+            {stake > 0 && inviting.mode !== 'team' && (
               <p className="small">
                 Bote total: <Stars value={stake * 2} size={14} />
               </p>

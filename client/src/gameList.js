@@ -81,10 +81,24 @@ export const GAMES = [
   },
 ];
 
+// Juegos de habilidad individuales (pagas entrada y cobras según tu desempeño)
+export const SKILL_GAMES = [
+  { id: 'g2048', path: '/juego/2048', name: '2048 de Michis', emoji: '🐱', tagline: 'Junta michis hasta llegar al rey', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #f6956b, #c2552a)', cat: { color: 'calico', mood: 'love' } },
+  { id: 'mines', path: '/juego/buscaminas', name: 'Buscaminas', emoji: '🥒', tagline: 'Destapa cajas sin pepinos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #13915f, #0a4536)', cat: { color: 'gray', mood: 'shocked' } },
+  { id: 'wordle', path: '/juego/wordle', name: 'Michi-Wordle', emoji: '🔤', tagline: 'Adivina la palabra en 6 intentos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #5ce1b5, #13915f)', cat: { color: 'white', mood: 'wink' } },
+  { id: 'sudoku', path: '/juego/sudoku', name: 'Sudoku', emoji: '🔢', tagline: '4×4, 6×6 o 9×9', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #3d6fd8, #23408a)', cat: { color: 'black', mood: 'normal' } },
+  { id: 'simon', path: '/juego/simon', name: 'Simón Michi', emoji: '🎵', tagline: 'Repite la secuencia de michis', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)', cat: { color: 'cream', mood: 'happy' } },
+  { id: 'flappy', path: '/juego/flappy', name: 'Flappy Michi', emoji: '🧶', tagline: 'Vuela entre los ovillos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #7aa2ff, #3d6fd8)', cat: { color: 'orange', mood: 'happy' } },
+  { id: 'runner', path: '/juego/runner', name: 'Michi Runner', emoji: '🏃', tagline: 'Salta pepinos y corre lejos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #f59e42, #9c3b16)', cat: { color: 'orange', mood: 'wink' } },
+  { id: 'kart', path: '/juego/kart', name: 'Michi Kart', emoji: '🏎️', tagline: 'Esquiva obstáculos a toda velocidad', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #ec4899, #9d174d)', cat: { color: 'black', mood: 'happy' } },
+  { id: 'sprint', path: '/juego/sprint', name: 'Sprint 100 m', emoji: '⚡', tagline: 'Toca alternado lo más rápido posible', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #ffcf5a, #c2552a)', cat: { color: 'gray', mood: 'shocked' } },
+];
+
 // Juegos en tiempo real para jugar en pareja
 export const MULTI_GAMES = [
   {
     id: 'rps',
+    mode: 'vs',
     name: 'Piedra, papel o tijera',
     emoji: '✊',
     tagline: 'Al mejor de 3, eligen en secreto',
@@ -92,6 +106,7 @@ export const MULTI_GAMES = [
   },
   {
     id: 'connect4',
+    mode: 'vs',
     name: 'Conecta 4 de Michis',
     emoji: '🔴',
     tagline: 'Alinea 4 michis antes que tu pareja',
@@ -99,6 +114,7 @@ export const MULTI_GAMES = [
   },
   {
     id: 'memory',
+    mode: 'vs',
     name: 'Memoria de Michis',
     emoji: '🧠',
     tagline: 'Encuentra más parejas de michis',
@@ -106,6 +122,7 @@ export const MULTI_GAMES = [
   },
   {
     id: 'solitaire',
+    mode: 'vs',
     name: 'Duelo de Solitario',
     emoji: '♠️',
     tagline: 'El mismo reparto, gana quien termine primero',
@@ -114,6 +131,7 @@ export const MULTI_GAMES = [
   },
   {
     id: 'blackjack',
+    mode: 'team',
     name: 'Blackjack en pareja',
     emoji: '🃏',
     tagline: 'Los dos contra el crupier, en la misma mesa',
@@ -121,10 +139,131 @@ export const MULTI_GAMES = [
   },
   {
     id: 'race',
+    mode: 'vs',
     name: 'Carrera en pareja',
     emoji: '🏁',
     tagline: 'Gana aquel cuyo michi llegue antes',
     gradient: 'linear-gradient(135deg, #f59e42, #c2552a)',
+  },
+  {
+    id: 'battleship',
+    mode: 'vs',
+    name: 'Batalla Naval',
+    emoji: '🚢',
+    tagline: 'Hunde la flota de tu pareja',
+    gradient: 'linear-gradient(135deg, #0ea5b7, #0b6475)',
+  },
+  {
+    id: 'stop',
+    mode: 'vs',
+    name: 'Stop / Basta',
+    emoji: '✋',
+    tagline: 'Una letra, seis categorías, ¡basta!',
+    gradient: 'linear-gradient(135deg, #f59e42, #c2552a)',
+  },
+  {
+    id: 'reflex',
+    mode: 'vs',
+    name: 'Duelo de reflejos',
+    emoji: '⚡',
+    tagline: 'Toca primero cuando aparezca el michi',
+    gradient: 'linear-gradient(135deg, #ffcf5a, #b7791f)',
+  },
+  {
+    id: 'dots',
+    mode: 'vs',
+    name: 'Puntos y cajas',
+    emoji: '🔲',
+    tagline: 'Cierra más cajas que tu pareja',
+    gradient: 'linear-gradient(135deg, #8b5cf6, #4c1d95)',
+  },
+  {
+    id: 'ultimate',
+    mode: 'vs',
+    name: 'Tres en raya gigante',
+    emoji: '#️⃣',
+    tagline: 'Un tres en raya dentro de otro',
+    gradient: 'linear-gradient(135deg, #ec4899, #831843)',
+  },
+  {
+    id: 'duel2048',
+    mode: 'vs',
+    name: 'Duelo de 2048',
+    emoji: '🐱',
+    tagline: 'El mismo tablero, 3 minutos',
+    gradient: 'linear-gradient(135deg, #f6956b, #c2552a)',
+  },
+  {
+    id: 'duelwordle',
+    mode: 'vs',
+    name: 'Duelo de Wordle',
+    emoji: '🔤',
+    tagline: 'La misma palabra, gana quien use menos intentos',
+    gradient: 'linear-gradient(135deg, #5ce1b5, #13915f)',
+  },
+  {
+    id: 'ghostrace',
+    mode: 'vs',
+    name: 'Carrera fantasma',
+    emoji: '👻',
+    tagline: 'La misma pista; tu pareja corre como fantasma',
+    gradient: 'linear-gradient(135deg, #7aa2ff, #23408a)',
+  },
+  {
+    id: 'sprintlive',
+    mode: 'vs',
+    name: 'Sprint en vivo',
+    emoji: '🏃',
+    tagline: '100 metros tocando a toda velocidad',
+    gradient: 'linear-gradient(135deg, #ef4444, #7f1d1d)',
+  },
+  {
+    id: 'draw',
+    mode: 'team',
+    name: 'Dibuja y adivina',
+    emoji: '🎨',
+    tagline: 'Uno dibuja y el otro adivina',
+    gradient: 'linear-gradient(135deg, #f472b6, #9d174d)',
+  },
+  {
+    id: 'memorytime',
+    mode: 'team',
+    name: 'Memoria contra el reloj',
+    emoji: '⏱️',
+    tagline: 'Encuentren las 10 parejas a tiempo',
+    gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)',
+  },
+  {
+    id: 'wordsearch',
+    mode: 'team',
+    name: 'Sopa de letras',
+    emoji: '🔎',
+    tagline: 'Encuentren las 8 palabras juntos',
+    gradient: 'linear-gradient(135deg, #13915f, #0a4536)',
+  },
+  {
+    id: 'simonteam',
+    mode: 'team',
+    name: 'Simón en equipo',
+    emoji: '🎵',
+    tagline: 'Se turnan para repetir la secuencia',
+    gradient: 'linear-gradient(135deg, #3d6fd8, #23408a)',
+  },
+  {
+    id: 'relay',
+    mode: 'team',
+    name: 'Relevos',
+    emoji: '🧶',
+    tagline: 'Cada uno corre una posta contra el reloj',
+    gradient: 'linear-gradient(135deg, #f59e42, #9c3b16)',
+  },
+  {
+    id: 'sprintteam',
+    mode: 'team',
+    name: 'Sprint en equipo',
+    emoji: '🤝',
+    tagline: 'Toquen juntos para ganarle al crupier',
+    gradient: 'linear-gradient(135deg, #5ce1b5, #0b6475)',
   },
 ];
 
@@ -132,5 +271,6 @@ export const MULTI_BY_ID = Object.fromEntries(MULTI_GAMES.map((g) => [g.id, g]))
 
 export const GAME_BY_ID = Object.fromEntries([
   ...GAMES.map((g) => [g.id, g]),
+  ...SKILL_GAMES.map((g) => [`sk_${g.id}`, g]),
   ...MULTI_GAMES.map((g) => [`mp_${g.id}`, { ...g, name: `${g.name} 💞` }]),
 ]);

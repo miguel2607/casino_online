@@ -57,6 +57,19 @@ export function attachRealtime(httpServer) {
     socket.on('match:action', handle(socket, (u, p) => manager.act(u, p)));
     socket.on('match:forfeit', handle(socket, (u, p) => manager.forfeit(u, p)));
 
+    // Pulsos frecuentes: sin consultar la base de datos y con un límite de envíos por segundo
+    let pulseWindow = Date.now();
+    let pulses = 0;
+    socket.on('match:pulse', (payload) => {
+      const now = Date.now();
+      if (now - pulseWindow > 1000) {
+        pulseWindow = now;
+        pulses = 0;
+      }
+      if (++pulses > 30) return;
+      manager.pulse({ id: userId }, payload ?? {}).catch((err) => err.status || console.error(err));
+    });
+
     socket.on(
       'sticker',
       handle(socket, async (u, { sticker }) => {
