@@ -749,3 +749,45 @@
   font-size: 0.72rem;
   font-weight: 800;
 }
+
+/* ---- iOS < 15 no soporta aspect-ratio: alturas de respaldo con padding ---- */
+@supports not (aspect-ratio: 1 / 1) {
+  .c4-cell::before,
+  .scratch-cell::before,
+  .avatar-option::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+  .scratch-cell,
+  .avatar-option {
+    position: relative;
+  }
+  .scratch-cell::before,
+  .avatar-option::before {
+    float: left;
+  }
+  .memory-card::before {
+    content: '';
+    display: block;
+    padding-top: 133.333%;
+  }
+  .wheel-wrap {
+    height: 0;
+    padding-top: min(100%, 340px);
+  }
+  .wheel-wrap .wheel {
+    position: absolute;
+    inset: 0;
+  }
+  .wheel-result {
+    height: 78%;
+  }
+}
+@supports not (aspect-ratio: 1 / 1) {
+  @media (max-width: 640px) {
+    .wheel-wrap {
+      padding-top: min(100%, 270px);
+    }
+  }
+}
