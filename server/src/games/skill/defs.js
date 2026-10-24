@@ -188,32 +188,17 @@ const flappy = arcade({
   summary: (v) => `Pasaste ${v} ovillos`,
 });
 
-// Contrarreloj: 105 m a 11 m/s (~9,5 s sin choques). Igual que RUNNER_SOLO en client/src/arcade/engines.js
-const RUNNER_MIN_SECONDS = 105 / 11 - 0.3;
-const runner = arcade({
-  label: 'Michi Runner',
-  table: [
-    [10, 10],
-    [11.2, 5],
-    [12.6, 3],
-    [14, 2],
-    [15, 1],
-  ],
-  higherIsBetter: false,
-  plausible: (v, secs) => v >= RUNNER_MIN_SECONDS && v <= secs + 2,
-  summary: (v) => `Llegó a la meta en ${v.toFixed(2)} s${v > 17 ? ' (el premio llega hasta 15 s)' : ''}`,
-});
-
 const kart = arcade({
   label: 'Michi Kart',
-  // Más rápido que antes (18 → 38 m/s): se recorre más distancia, así que las metas también suben
+  // Cada pescadito acelera el kart (hasta 90 m/s, ver KART en client/src/arcade/engines.js)
   table: [
     [5500, 8],
     [3500, 4],
     [2000, 2],
     [1000, 1],
   ],
-  plausible: (v, secs) => v <= secs * 55 + 80,
+  // 90 m/s de distancia + ~1 pescadito por segundo (15 puntos) a esa velocidad
+  plausible: (v, secs) => v <= secs * 110 + 80,
   summary: (v) => `${Math.round(v)} puntos en la pista`,
 });
 
@@ -231,4 +216,4 @@ const sprint = arcade({
   summary: (v) => `100 metros en ${v.toFixed(2)} s${v > 9 ? ' (el máximo para ganar es 9 s)' : ''}`,
 });
 
-export const SKILL_GAMES = { g2048: game2048, mines, sudoku, simon, wordle, flappy, runner, kart, sprint };
+export const SKILL_GAMES = { g2048: game2048, mines, sudoku, simon, wordle, flappy, kart, sprint };

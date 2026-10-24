@@ -16,6 +16,7 @@ import coupleRoutes from './routes/couple.js';
 import { attachRealtime } from './realtime.js';
 import { closeRetiredMatches } from './multi/manager.js';
 import gameRoutes from './games/index.js';
+import { closeRetiredSkillSessions } from './games/skill/index.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -70,6 +71,7 @@ try {
   await ensureDatabase();
   await migrate();
   await closeRetiredMatches();
+  await closeRetiredSkillSessions();
 } catch (err) {
   console.error('❌ No se pudo conectar a PostgreSQL:', err.message);
   console.error('   Revisa DATABASE_URL en server/.env');

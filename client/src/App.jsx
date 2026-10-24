@@ -22,7 +22,7 @@ import Minesweeper from './games/skill/Minesweeper.jsx';
 import Wordle from './games/skill/Wordle.jsx';
 import Sudoku from './games/skill/Sudoku.jsx';
 import Simon from './games/skill/Simon.jsx';
-import { FlappyPage, KartPage, RunnerPage, SprintPage } from './games/skill/Arcade.jsx';
+import { FlappyPage, KartPage, SprintPage } from './games/skill/Arcade.jsx';
 
 function Splash() {
   return (
@@ -80,7 +80,6 @@ export default function App() {
         <Route path="juego/sudoku" element={<Sudoku />} />
         <Route path="juego/simon" element={<Simon />} />
         <Route path="juego/flappy" element={<FlappyPage />} />
-        <Route path="juego/runner" element={<RunnerPage />} />
         <Route path="juego/kart" element={<KartPage />} />
         <Route path="juego/sprint" element={<SprintPage />} />
       </Route>

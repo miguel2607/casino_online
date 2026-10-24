@@ -16,7 +16,7 @@ export const GAME_LABELS = {
   sk_simon: 'Simón Michi',
   sk_wordle: 'Michi-Wordle',
   sk_flappy: 'Flappy Michi',
-  sk_runner: 'Michi Runner',
+  sk_runner: 'Michi Runner', // retirado: se conserva para el historial
   sk_kart: 'Michi Kart',
   sk_sprint: 'Sprint de 100 metros',
   // En pareja (tiempo real)

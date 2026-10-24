@@ -1,12 +1,27 @@
 import { Router } from 'express';
 import { pool, withTx } from '../../db.js';
 import { HttpError, bad } from '../../errors.js';
-import { createSession, getActiveSession, parseBet, placeBet, saveSession, settle } from '../../wallet.js';
+import { GAME_LABELS, createSession, getActiveSession, moveStars, parseBet, placeBet, saveSession, settle } from '../../wallet.js';
 import { SKILL_GAMES } from './defs.js';
 
 // Juegos de habilidad individuales: pagas la entrada y cobras según tu desempeño.
 const router = Router();
 const key = (game) => `sk_${game}`;
+
+/** Cierra partidas activas de juegos de habilidad que ya no existen y devuelve la entrada (se llama al arrancar). */
+export async function closeRetiredSkillSessions() {
+  await withTx(async (c) => {
+    const { rows } = await c.query(
+      `SELECT * FROM game_sessions WHERE status = 'active' AND game LIKE 'sk\\_%' AND NOT (game = ANY($1)) FOR UPDATE`,
+      [Object.keys(SKILL_GAMES).map(key)],
+    );
+    for (const s of rows) {
+      if (s.bet > 0) await moveStars(c, s.user_id, s.bet, 'refund', `Devolución: ${GAME_LABELS[s.game] || 'juego retirado'}`, s.game);
+      await c.query(`UPDATE game_sessions SET status = 'finished', updated_at = now() WHERE id = $1`, [s.id]);
+    }
+    if (rows.length) console.log(`🧹 ${rows.length} partida(s) de juegos de habilidad retirados cerradas y reembolsadas`);
+  });
+}
 
 function getDef(req) {
   const def = SKILL_GAMES[req.params.game];

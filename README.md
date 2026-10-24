@@ -62,7 +62,7 @@ Los juegos individuales siguen funcionando igual para cuando cada uno quiera jug
 
 ### Juegos de habilidad (individuales)
 
-Se paga una entrada y se cobra según el desempeño: 2048 de Michis, Buscaminas, Michi-Wordle, Sudoku (4×4, 6×6, 9×9), Simón Michi, Flappy Michi, Michi Runner, Michi Kart y Sprint de 100 m. En los de lógica el servidor reproduce la partida para validarla; en los de acción revisa que el puntaje sea posible.
+Se paga una entrada y se cobra según el desempeño: 2048 de Michis, Buscaminas, Michi-Wordle, Sudoku (4×4, 6×6, 9×9), Simón Michi, Flappy Michi, Michi Kart (cada pescadito te acelera) y Sprint de 100 m. En los de lógica el servidor reproduce la partida para validarla; en los de acción revisa que el puntaje sea posible.
 
 ### En pareja: uno contra el otro
 

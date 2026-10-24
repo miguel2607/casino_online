@@ -1,47 +1,12 @@
 import SkillShell from '../../components/SkillShell.jsx';
-import RunnerGame from '../../arcade/RunnerGame.jsx';
 import KartGame from '../../arcade/KartGame.jsx';
 import FlappyGame from '../../arcade/FlappyGame.jsx';
 import SprintGame from '../../arcade/SprintGame.jsx';
-import { RUNNER_SOLO, SPRINT, runnerMultiplier } from '../../arcade/engines.js';
+import { SPRINT } from '../../arcade/engines.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useSkillGame } from '../../hooks/gameHooks.js';
 
-// Los cuatro juegos de acción individuales: al terminar la partida se envía el puntaje
-
-export function RunnerPage() {
-  const skill = useSkillGame('runner');
-  const { user } = useAuth();
-  const s = skill.session;
-  return (
-    <SkillShell
-      wide
-      title="Michi Runner"
-      emoji="🏃"
-      subtitle="Contrarreloj: llega a la meta en 10 segundos o menos para el premio máximo"
-      controls="Cada choque te frena y te baja el multiplicador. Celular: toca la pantalla o el botón para saltar y mantén «Agacharse». PC: espacio o ↑ para saltar, ↓ para agacharse."
-      table={RUNNER_SOLO.table.map(([t, m]) => [`Llegar en ${t.toFixed(t % 1 ? 1 : 0).replace('.', ',')} s o menos`, m])}
-      skill={skill}
-      canForfeit={false}
-    >
-      {s && (
-        <RunnerGame
-          key={s.id}
-          seed={s.seed}
-          race
-          length={RUNNER_SOLO.length}
-          speed={RUNNER_SOLO.speed}
-          firstObstacleAt={14}
-          maxTime={RUNNER_SOLO.maxTime}
-          stumble={RUNNER_SOLO.stumble}
-          multiplierFor={runnerMultiplier}
-          myColor={user.avatar}
-          onEnd={({ time }) => !skill.result && skill.finish({ score: time }).catch(() => {})}
-        />
-      )}
-    </SkillShell>
-  );
-}
+// Los tres juegos de acción individuales: al terminar la partida se envía el puntaje
 
 export function KartPage() {
   const skill = useSkillGame('kart');
@@ -51,8 +16,8 @@ export function KartPage() {
     <SkillShell
       title="Michi Kart"
       emoji="🏎️"
-      subtitle="Cambia de carril para esquivar obstáculos; cada vez vas más rápido"
-      controls="Celular: toca la mitad izquierda o derecha (o los botones). PC: ← → o A D. Cada pescadito vale 15 puntos."
+      subtitle="Cambia de carril para esquivar obstáculos. Cada pescadito te acelera… ¿hasta dónde aguantas?"
+      controls="Celular: toca la mitad izquierda o derecha (o los botones). PC: ← → o A D. Cada pescadito vale 15 puntos y te hace ir más rápido."
       table={[
         ['5.500 puntos', 8],
         ['3.500 puntos', 4],

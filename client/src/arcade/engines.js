@@ -20,23 +20,6 @@ const OBSTACLES = {
   bird: { w: 0.8, h: 0.55, y: 0.62, emoji: '🐦' },
 };
 
-// Michi Runner individual: contra el reloj. Sin choques se llega en ~9,5 s; cada choque cuesta ~1,5 s.
-// Debe coincidir con la tabla del servidor (server/src/games/skill/defs.js).
-export const RUNNER_SOLO = {
-  speed: 11,
-  length: 105,
-  maxTime: 25,
-  stumble: 1.2, // segundos parado tras chocar: correr sin saltar no debe dar premio
-  table: [
-    [10, 10],
-    [11.2, 5],
-    [12.6, 3],
-    [14, 2],
-    [15, 1],
-  ],
-};
-export const runnerMultiplier = (t) => RUNNER_SOLO.table.find(([limit]) => t <= limit)?.[1] ?? 0;
-
 export const runnerSpeedAt = (d, race, speed = RUNNER.raceSpeed) =>
   race ? speed : Math.min(RUNNER.maxSpeed, RUNNER.startSpeed + d / 120);
 
@@ -58,9 +41,12 @@ export function buildRunnerCourse(seed, length, race, speed = RUNNER.raceSpeed, 
 }
 
 // ---------------- Michi Kart ----------------
-export const KART = { lanes: 3, startSpeed: 18, maxSpeed: 38, switchTime: 0.11 };
+// La pista acelera sola hasta cruiseSpeed; cada pescadito suma fishBoost encima, hasta maxSpeed.
+// Si cambias maxSpeed, revisa el límite de puntaje del kart en server/src/games/skill/defs.js.
+export const KART = { lanes: 3, startSpeed: 18, cruiseSpeed: 32, fishBoost: 2.5, maxSpeed: 90, switchTime: 0.11 };
 const KART_OBSTACLES = ['🚧', '📦', '🐕', '🛢️'];
-export const kartSpeedAt = (d) => Math.min(KART.maxSpeed, KART.startSpeed + d / 50);
+export const kartSpeedAt = (d, fish = 0) =>
+  Math.min(KART.maxSpeed, Math.min(KART.cruiseSpeed, KART.startSpeed + d / 50) + fish * KART.fishBoost);
 
 export function buildKartCourse(seed, length = 12000) {
   const rnd = mulberry32(seed);

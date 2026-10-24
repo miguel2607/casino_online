@@ -89,7 +89,6 @@ export const SKILL_GAMES = [
   { id: 'sudoku', path: '/juego/sudoku', name: 'Sudoku', emoji: '🔢', tagline: '4×4, 6×6 o 9×9', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #3d6fd8, #23408a)', cat: { color: 'black', mood: 'normal' } },
   { id: 'simon', path: '/juego/simon', name: 'Simón Michi', emoji: '🎵', tagline: 'Repite la secuencia de michis', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)', cat: { color: 'cream', mood: 'happy' } },
   { id: 'flappy', path: '/juego/flappy', name: 'Flappy Michi', emoji: '🧶', tagline: 'Vuela entre los ovillos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #7aa2ff, #3d6fd8)', cat: { color: 'orange', mood: 'happy' } },
-  { id: 'runner', path: '/juego/runner', name: 'Michi Runner', emoji: '🏃', tagline: 'Salta pepinos y corre lejos', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #f59e42, #9c3b16)', cat: { color: 'orange', mood: 'wink' } },
   { id: 'kart', path: '/juego/kart', name: 'Michi Kart', emoji: '🏎️', tagline: 'Esquiva obstáculos a toda velocidad', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #ec4899, #9d174d)', cat: { color: 'black', mood: 'happy' } },
   { id: 'sprint', path: '/juego/sprint', name: 'Sprint 100 m', emoji: '⚡', tagline: 'Toca alternado lo más rápido posible', tag: 'Habilidad', gradient: 'linear-gradient(135deg, #ffcf5a, #c2552a)', cat: { color: 'gray', mood: 'shocked' } },
 ];
@@ -275,4 +274,5 @@ export const GAME_BY_ID = Object.fromEntries([
   ...MULTI_GAMES.map((g) => [`mp_${g.id}`, { ...g, name: `${g.name} 💞` }]),
   // Juegos retirados: se conservan para mostrar el historial
   ['mp_ultimate', { id: 'ultimate', name: 'Tres en raya gigante 💞', emoji: '#️⃣' }],
+  ['sk_runner', { id: 'runner', name: 'Michi Runner', emoji: '🏃' }],
 ]);
