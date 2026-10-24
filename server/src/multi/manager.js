@@ -204,14 +204,18 @@ function ctxFor(m) {
     /** Reenvía el estado completo a los dos (útil tras un temporizador sin guardar). */
     broadcast: () => broadcast(m),
     // persist: false para bucles rápidos (p. ej. la física de una carrera) que no necesitan guardarse siempre
-    schedule(ms, fn, { persist: save = true } = {}) {
+    // broadcast: false cuando el bucle ya envía su propio pulso (el estado completo solo se reenvía al terminar)
+    schedule(ms, fn, { persist: save = true, broadcast: send = true } = {}) {
       setTimeout(() => {
         withLock(m.id, async () => {
           if (m.status !== 'active') return;
           fn(m.state, ctxFor(m));
           if (save || m.state.finished) await persist(m);
           if (m.state.finished) await finalize(m);
-          broadcast(m);
+          if (send || m.state.finished || m.state.dirty) {
+            delete m.state.dirty;
+            broadcast(m);
+          }
         }).catch((err) => console.error('Error en temporizador de partida', err));
       }, Math.max(0, ms));
     },

@@ -16,6 +16,16 @@ import memorytime from './memorytime.js';
 import wordsearch from './wordsearch.js';
 import simonteam from './simonteam.js';
 import { ghostrace, relay, sprintlive, sprintteam } from './races.js';
+import kartrace from './kartrace.js';
+import airhockey from './airhockey.js';
+import sumo from './sumo.js';
+import bomber from './bomber.js';
+import fishing from './fishing.js';
+import kitchen from './kitchen.js';
+import kartteam from './kartteam.js';
+import defense from './defense.js';
+import maze from './maze.js';
+import escape from './escape.js';
 
 /**
  * Cada juego implementa:
@@ -24,6 +34,7 @@ import { ghostrace, relay, sprintlive, sprintteam } from './races.js';
  *  view(state, idx) → lo que ve ese jugador
  *  detail(state, idx) → texto corto para el historial
  * Opcionales: parseOptions, resume (temporizadores), pulse (tiempo real), forfeit, payouts, outcomes
+ * Los juegos de acción (kart, air hockey, sumo…) se arman con arena() en arena.js
  */
 export const MULTI_GAMES = {
   rps,
@@ -47,4 +58,14 @@ export const MULTI_GAMES = {
   relay,
   sprintlive,
   sprintteam,
+  kartrace,
+  airhockey,
+  sumo,
+  bomber,
+  fishing,
+  kitchen,
+  kartteam,
+  defense,
+  maze,
+  escape,
 };

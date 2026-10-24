@@ -66,11 +66,17 @@ Se paga una entrada y se cobra según el desempeño: 2048 de Michis, Buscaminas,
 
 ### En pareja: uno contra el otro
 
-Piedra papel o tijera · Conecta 4 · Memoria · Duelo de Solitario · Carrera en pareja · Batalla Naval · Stop/Basta · Duelo de reflejos · Puntos y cajas · Tres en raya gigante · Duelo de 2048 · Duelo de Wordle · Carrera fantasma · Sprint en vivo.
+**Acción con joystick:** 🏎️ Michi Kart Racing (3 vueltas, turbos y poderes) · 🏒 Air Hockey · 🤼 Sumo de michis · 💣 Bomber Michi · 🎣 Pesca rápida.
+
+Piedra papel o tijera · Conecta 4 · Memoria · Duelo de Solitario · Carrera en pareja · Batalla Naval · Stop/Basta · Duelo de reflejos · Puntos y cajas · Tres en raya · Duelo de 2048 · Duelo de Wordle · Carrera fantasma · Sprint en vivo.
 
 ### En pareja: en equipo contra el casino
 
+**Nuevos:** 🍣 Cocina de michis (estilo Overcooked) · 🎯 Kart en equipo (uno maneja, el otro dispara) · 🏠 Defender la casa · 🙈 Laberinto a ciegas · 🔐 Escape room.
+
 Blackjack en pareja · Dibuja y adivina · Memoria contra el reloj · Sopa de letras · Simón en equipo · Relevos · Sprint en equipo. Si el equipo cumple el reto, los dos cobran.
+
+En los juegos de acción la física corre en el servidor (`server/src/multi/games/arena.js`, ~25 actualizaciones por segundo): cada celular solo manda su joystick y botones, así nadie puede hacer trampa y los dos ven lo mismo.
 
 Todos se juegan con el dedo en el celular o con teclado y mouse en PC.
 

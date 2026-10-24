@@ -27,6 +27,16 @@ import MemoryTimeGame from '../games/multi/MemoryTimeGame.jsx';
 import WordSearchGame from '../games/multi/WordSearchGame.jsx';
 import SimonTeamGame from '../games/multi/SimonTeamGame.jsx';
 import { GhostRaceGame, RelayGame, SprintLiveGame, SprintTeamGame } from '../games/multi/RaceGames.jsx';
+import KartRaceGame from '../games/multi/KartRaceGame.jsx';
+import AirHockeyGame from '../games/multi/AirHockeyGame.jsx';
+import SumoGame from '../games/multi/SumoGame.jsx';
+import BomberGame from '../games/multi/BomberGame.jsx';
+import FishingGame from '../games/multi/FishingGame.jsx';
+import KitchenGame from '../games/multi/KitchenGame.jsx';
+import KartTeamGame from '../games/multi/KartTeamGame.jsx';
+import DefenseGame from '../games/multi/DefenseGame.jsx';
+import MazeGame from '../games/multi/MazeGame.jsx';
+import EscapeGame from '../games/multi/EscapeGame.jsx';
 
 const COMPONENTS = {
   rps: RpsGame,
@@ -50,6 +60,16 @@ const COMPONENTS = {
   relay: RelayGame,
   sprintlive: SprintLiveGame,
   sprintteam: SprintTeamGame,
+  kartrace: KartRaceGame,
+  airhockey: AirHockeyGame,
+  sumo: SumoGame,
+  bomber: BomberGame,
+  fishing: FishingGame,
+  kitchen: KitchenGame,
+  kartteam: KartTeamGame,
+  defense: DefenseGame,
+  maze: MazeGame,
+  escape: EscapeGame,
 };
 
 /** Colores de ficha de cada jugador: su michi, o uno distinto si eligieron el mismo. */

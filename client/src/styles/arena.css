@@ -1,0 +1,461 @@
+/* ---------- Juegos de acción en pareja (joystick, canvas) ---------- */
+.arena-game {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.arena-wrap {
+  width: 100%;
+}
+.arena-stage {
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 3px solid var(--surface-3);
+  background: #120b20;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.arena-stage canvas {
+  display: block;
+}
+.arena-hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: var(--surface);
+  font-weight: 800;
+}
+.arena-hud .cat {
+  vertical-align: middle;
+}
+.arena-hud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.arena-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 0 4px 22px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.arena-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+.arena-help {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.arena-flash {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(18, 11, 32, 0.8);
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: arena-pop 0.25s ease-out;
+}
+.arena-flash.is-bad {
+  color: var(--red);
+}
+.arena-flash.is-good {
+  color: var(--gold);
+}
+@keyframes arena-pop {
+  from { transform: translate(-50%, 8px) scale(0.8); opacity: 0; }
+}
+
+.joystick {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 70%);
+  border: 3px solid var(--line-strong);
+  touch-action: none;
+  cursor: grab;
+}
+.joystick.is-active {
+  border-color: var(--pink);
+}
+.joystick-knob {
+  position: absolute;
+  left: 27%;
+  top: 27%;
+  width: 46%;
+  height: 46%;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--pink-2), var(--pink-deep));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+.joystick-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -22px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.25);
+  background: linear-gradient(160deg, var(--gold), var(--gold-2));
+  color: #2b1a05;
+  font-weight: 800;
+  font-size: 0.78rem;
+  line-height: 1.1;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.08s, filter 0.08s;
+}
+.action-btn .big {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+.action-btn.is-held {
+  transform: scale(0.9);
+  filter: brightness(1.15);
+}
+.action-btn:disabled {
+  opacity: 0.4;
+}
+.action-btn.is-pink {
+  background: linear-gradient(160deg, var(--pink-2), var(--pink-deep));
+  color: #fff;
+}
+.action-btn.is-mint {
+  background: linear-gradient(160deg, #8ff0cf, #13915f);
+  color: #06301f;
+}
+.action-btn.is-violet {
+  background: linear-gradient(160deg, #c4a6ff, var(--violet));
+  color: #fff;
+}
+
+/* Pesca */
+.fish-lake {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 300px;
+  border: 0;
+  border-radius: 22px;
+  background: radial-gradient(ellipse at 50% 60%, #3d8fd8, #1d4f8a 70%, #12305a);
+  color: #fff;
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.fish-lake.is-bite {
+  background: radial-gradient(ellipse at 50% 60%, #5cb3ff, #2563b0 70%, #12305a);
+}
+.fish-lake.is-gold {
+  box-shadow: inset 0 0 0 4px var(--gold);
+}
+.fish-bobber {
+  font-size: 3.4rem;
+  animation: bob 1.8s ease-in-out infinite;
+}
+.fish-lake.is-bite .fish-bobber {
+  animation: dunk 0.18s ease-in-out infinite alternate;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+@keyframes dunk {
+  from { transform: translateY(0) rotate(-8deg); }
+  to { transform: translateY(14px) rotate(8deg); }
+}
+.fish-lake strong {
+  margin-top: 10px;
+  font-size: 1.3rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.fish-lake small {
+  margin-top: 4px;
+  opacity: 0.85;
+}
+.fish-caught {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  min-height: 28px;
+  margin-top: 8px;
+  font-size: 1.3rem;
+}
+
+/* Laberinto */
+.maze-board {
+  position: relative;
+  margin: 0 auto;
+  border-radius: 14px;
+  background: #1c1431;
+  border: 3px solid var(--surface-3);
+}
+.maze-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(3, 64px);
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.maze-pad .btn {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  font-size: 1.6rem;
+  touch-action: manipulation;
+}
+.maze-signal {
+  margin: 10px auto 0;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: rgba(255, 207, 90, 0.14);
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  animation: arena-pop 0.25s ease-out;
+}
+.maze-signals {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.maze-signals .btn {
+  min-width: 64px;
+  height: 56px;
+  font-size: 1.3rem;
+  touch-action: manipulation;
+}
+
+/* Escape room */
+.escape-locks {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 1.6rem;
+}
+.escape-lock.is-open {
+  filter: drop-shadow(0 0 8px var(--mint));
+}
+.escape-lock.is-current {
+  animation: glow-pink 1.8s ease-in-out infinite;
+  border-radius: 8px;
+}
+.escape-clue {
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px dashed var(--line-strong);
+}
+.escape-colors {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+.escape-color {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+button.escape-color {
+  width: 52px;
+  height: 52px;
+  touch-action: manipulation;
+}
+.escape-symbols {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 2.2rem;
+}
+.escape-table {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.escape-table span {
+  padding: 6px 2px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.escape-wires {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.escape-wire {
+  position: relative;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  touch-action: manipulation;
+}
+.escape-wire.is-cut {
+  opacity: 0.25;
+  background-image: repeating-linear-gradient(90deg, transparent 0 46%, #120b20 46% 54%, transparent 54% 100%) !important;
+}
+.escape-wire span {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+}
+.escape-rules {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.45;
+}
+.escape-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 140px;
+  overflow-y: auto;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+.escape-chat .mine {
+  align-self: flex-end;
+  background: rgba(255, 111, 174, 0.18);
+}
+.escape-chat > div {
+  max-width: 80%;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.escape-say {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.escape-say input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Kart en equipo */
+.kt-fire {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  margin-top: 12px;
+}
+.kt-fire .action-btn {
+  flex: 1;
+  max-width: 110px;
+  border-radius: 18px;
+}
+
+/* Conecta 4 (SVG) */
+.c4-svg-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.c4-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.c4-svg .c4-hit {
+  cursor: pointer;
+}
+.c4-svg .c4-hit:hover .c4-hover {
+  opacity: 0.18;
+}
+@media (hover: none) {
+  .c4-svg .c4-hit:hover .c4-hover {
+    opacity: 0;
+  }
+}
+.c4-drop {
+  animation: c4-fall 0.42s cubic-bezier(0.35, 0, 0.6, 1.3);
+}
+@keyframes c4-fall {
+  from { transform: translateY(var(--from)); }
+  to { transform: translateY(0); }
+}
+.c4-line-piece {
+  animation: c4-pulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes c4-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.55; }
+}
+
+@media (max-width: 420px) {
+  .arena-controls {
+    gap: 8px;
+  }
+  .maze-pad {
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 58px);
+  }
+  .maze-pad .btn {
+    width: 58px;
+    height: 58px;
+  }
+}

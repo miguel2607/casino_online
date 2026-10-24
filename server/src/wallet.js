@@ -42,6 +42,16 @@ export const GAME_LABELS = {
   mp_relay: 'Relevos',
   mp_sprintlive: 'Sprint en vivo',
   mp_sprintteam: 'Sprint en equipo',
+  mp_kartrace: 'Michi Kart Racing',
+  mp_airhockey: 'Air Hockey de michis',
+  mp_sumo: 'Sumo de michis',
+  mp_bomber: 'Bomber Michi',
+  mp_fishing: 'Pesca rápida',
+  mp_kitchen: 'Cocina de michis',
+  mp_kartteam: 'Kart en equipo',
+  mp_defense: 'Defender la casa',
+  mp_maze: 'Laberinto a ciegas',
+  mp_escape: 'Escape room',
 };
 
 export const MAX_BET = 1_000_000;

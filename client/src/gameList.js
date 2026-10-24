@@ -95,6 +95,88 @@ export const SKILL_GAMES = [
 
 // Juegos en tiempo real para jugar en pareja
 export const MULTI_GAMES = [
+  // ---- Acción (joystick) ----
+  {
+    id: 'kartrace',
+    mode: 'vs',
+    name: 'Michi Kart Racing',
+    emoji: '🏎️',
+    tagline: '3 vueltas con joystick, turbos y poderes',
+    gradient: 'linear-gradient(135deg, #ec4899, #9d174d)',
+  },
+  {
+    id: 'airhockey',
+    mode: 'vs',
+    name: 'Air Hockey',
+    emoji: '🏒',
+    tagline: 'Defiende tu arco, primero en 5 goles',
+    gradient: 'linear-gradient(135deg, #5cb3ff, #2563b0)',
+  },
+  {
+    id: 'sumo',
+    mode: 'vs',
+    name: 'Sumo de michis',
+    emoji: '🤼',
+    tagline: 'Empuja a tu pareja fuera de la plataforma',
+    gradient: 'linear-gradient(135deg, #e8c98f, #9c6b2f)',
+  },
+  {
+    id: 'bomber',
+    mode: 'vs',
+    name: 'Bomber Michi',
+    emoji: '💣',
+    tagline: 'Bolas de pelo explosivas en un laberinto',
+    gradient: 'linear-gradient(135deg, #46a657, #1f5f2a)',
+  },
+  {
+    id: 'fishing',
+    mode: 'vs',
+    name: 'Pesca rápida',
+    emoji: '🎣',
+    tagline: 'Toca cuando pique… ¡pero no saques botas!',
+    gradient: 'linear-gradient(135deg, #3d8fd8, #12305a)',
+  },
+  {
+    id: 'kitchen',
+    mode: 'team',
+    name: 'Cocina de michis',
+    emoji: '🍣',
+    tagline: 'Preparen sushi pasándose los ingredientes',
+    gradient: 'linear-gradient(135deg, #f59e42, #c2552a)',
+  },
+  {
+    id: 'kartteam',
+    mode: 'team',
+    name: 'Kart en equipo',
+    emoji: '🎯',
+    tagline: 'Uno maneja y el otro dispara',
+    gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)',
+  },
+  {
+    id: 'defense',
+    mode: 'team',
+    name: 'Defender la casa',
+    emoji: '🏠',
+    tagline: 'Aguanten 6 oleadas de pepinos y perros',
+    gradient: 'linear-gradient(135deg, #4c9a52, #1f5f2a)',
+  },
+  {
+    id: 'maze',
+    mode: 'team',
+    name: 'Laberinto a ciegas',
+    emoji: '🙈',
+    tagline: 'Uno camina sin ver, el otro lo guía',
+    gradient: 'linear-gradient(135deg, #3b3349, #120b20)',
+  },
+  {
+    id: 'escape',
+    mode: 'team',
+    name: 'Escape room',
+    emoji: '🔐',
+    tagline: 'Combinen sus pistas para abrir 3 candados',
+    gradient: 'linear-gradient(135deg, #c43a5a, #3b1c4d)',
+  },
+  // ---- Clásicos ----
   {
     id: 'rps',
     mode: 'vs',
